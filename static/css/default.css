@@ -366,6 +366,11 @@ h1.page-header {
 	color: #006699;
 }
 
+h3 {
+    
+  text-align: center;
+}
+
 /* Content */
 
 #content {
@@ -750,6 +755,7 @@ img.right {
   font-family: roboto;
 }
 
+
 .forgotmodal-container #brand {
 
     height: 100px;
@@ -838,4 +844,9 @@ img.right {
 .forgotmodal-help{
   font-size: 12px;
 }
-/****** END LOGIN MODAL ******/
+/****** END FORGOT MODAL ******/
+/****** NOTICE MODAL ******/
+p #notice{
+  text-align: center;
+}
+/****** END NOTICE MODAL ******/
