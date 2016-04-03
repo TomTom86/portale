@@ -157,7 +157,7 @@ func (c *MainController) Login() {
 
 //Logout fun delete session and logout user
 func (c *MainController) Logout() {
-	c.activeContent("logout")
+	c.activeContent("user/logout")
 	c.DelSession("portale")
 	c.Redirect("/login", 302)
 }
@@ -252,7 +252,7 @@ func (c *MainController) Register() {
 		//Set verify message
 		link := "http://" + appcfgdomainname + "/check/" + user.IDkey
 		m.Email = u.Email
-		m.Subject = "Verifica account portale automezzi"
+		m.Subject = "Verifica account portale E' Così"
 		m.Body = "Per verificare l'account premere sul link: <a href=\"" + link + "\">" + link + "</a><br><br>Grazie,<br>E' Cosi'"
 		if !sendComunication(m) {
 			flash.Error("Impossibile inviare email di verifica")
@@ -362,6 +362,199 @@ func (c *MainController) Forgot() {
 		flash.Notice("Ti abbiamo inviato un link per resettare la password. Controlla la tua email.")
 		flash.Store(&c.Controller)
 		c.Redirect("/notice", 302)
+	}
+}
+
+// Profile func: User's can manage their account information
+func (c *MainController) Profile() {
+	c.activeContent("user/profile")
+
+	//******** c page requires login
+	sess := c.GetSession("portale")
+	if sess != nil {
+		m := sess.(map[string]interface{})
+		flash := beego.NewFlash()
+
+		//******** Read password hash from database
+		var x pk.PasswordHash
+
+		x.Hash = make([]byte, 32)
+		x.Salt = make([]byte, 16)
+
+		o := orm.NewOrm()
+		o.Using("default")
+		user := models.AuthUser{Email: m["username"].(string)}
+		err := o.Read(&user, "Email")
+		if err != nil {
+			flash.Error("Errore interno - Contattare l'Amministratore del sito")
+			flash.Store(&c.Controller)
+			return
+		}
+
+		// scan in the password hash/salt
+		if x.Hash, err = hex.DecodeString(user.Password[:64]); err != nil {
+			fmt.Println("ERROR:", err)
+		}
+		if x.Salt, err = hex.DecodeString(user.Password[64:]); err != nil {
+			fmt.Println("ERROR:", err)
+		}
+
+		// c deferred function ensures that the correct fields from the database are displayed
+		defer func(c *MainController, user *models.AuthUser) {
+			c.Data["First"] = user.First
+			c.Data["Last"] = user.Last
+			c.Data["Email"] = user.Email
+		}(c, &user)
+        
+            //XSRF attack defense
+        c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+		if c.Ctx.Input.Method() == "POST" {
+			first := c.GetString("first")
+			last := c.GetString("last")
+			email := c.GetString("email")
+			current := c.GetString("current")
+			password := c.GetString("password")
+			password2 := c.GetString("password2")
+			valid := validation.Validation{}
+			valid.Required(first, "first")
+			valid.Email(email, "email")
+			valid.Required(current, "current")
+			if valid.HasErrors() {
+				errormap := []string{}
+				for _, err := range valid.Errors {
+					errormap = append(errormap, "Validation failed on "+err.Key+": "+err.Message+"\n")
+				}
+				c.Data["Errors"] = errormap
+				return
+			}
+
+			if password != "" {
+				valid.MinSize(password, 6, "password")
+				valid.Required(password2, "password2")
+				if valid.HasErrors() {
+					errormap := []string{}
+					for _, err := range valid.Errors {
+						errormap = append(errormap, "Validation failed on "+err.Key+": "+err.Message+"\n")
+					}
+					c.Data["Errors"] = errormap
+					return
+				}
+
+				if password != password2 {
+					flash.Error("Le password non corrispondono")
+					flash.Store(&c.Controller)
+					return
+				}
+				h := pk.HashPassword(password)
+
+				// Convert password hash to string
+				user.Password = hex.EncodeToString(h.Hash) + hex.EncodeToString(h.Salt)
+			}
+
+			//******** Compare submitted password with database
+			if !pk.MatchPassword(current, &x) {
+				flash.Error("Password attuale errata")
+				flash.Store(&c.Controller)
+				return
+			}
+
+			//******** Save user info to database
+			user.First = first
+			user.Last = last
+			user.Email = email
+			user.LastEditDate = time.Now()
+
+			_, err := o.Update(&user)
+			if err != nil {
+				flash.Error("Errore interno")
+				flash.Store(&c.Controller)
+				return
+			}
+
+			flash.Notice("Profilo aggiornato")
+			flash.Store(&c.Controller)
+			//update sessin email
+			m["username"] = email
+		}
+	} else {
+		//if user isn't logged redirect in the ompage
+		c.Redirect("/login/", 302)
+		return
+	}
+
+}
+
+//Remove func delete user from DB
+func (c *MainController) Remove() {
+	c.activeContent("user/remove")
+
+	//******** c page requires login
+	sess := c.GetSession("portale")
+	if sess == nil {
+		c.Redirect("/login/", 302)
+		return
+	}
+	m := sess.(map[string]interface{})
+
+        //XSRF attack defense
+    c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	if c.Ctx.Input.Method() == "POST" {
+		current := c.GetString("current")
+		valid := validation.Validation{}
+		valid.Required(current, "current")
+		if valid.HasErrors() {
+			errormap := []string{}
+			for _, err := range valid.Errors {
+				errormap = append(errormap, "Validation failed on "+err.Key+": "+err.Message+"\n")
+			}
+			c.Data["Errors"] = errormap
+			return
+		}
+
+		flash := beego.NewFlash()
+
+		//******** Read password hash from database
+		var x pk.PasswordHash
+
+		x.Hash = make([]byte, 32)
+		x.Salt = make([]byte, 16)
+
+		o := orm.NewOrm()
+		o.Using("default")
+		user := models.AuthUser{Email: m["username"].(string)}
+		err := o.Read(&user, "Email")
+		if err != nil {
+			flash.Error("Errore interno")
+			flash.Store(&c.Controller)
+			return
+		}
+		// scan in the password hash/salt
+		if x.Hash, err = hex.DecodeString(user.Password[:64]); err != nil {
+			fmt.Println("ERROR:", err)
+		}
+		if x.Salt, err = hex.DecodeString(user.Password[64:]); err != nil {
+			fmt.Println("ERROR:", err)
+		}
+
+		//******** Compare submitted password with database
+		if !pk.MatchPassword(current, &x) {
+			flash.Error("Password corrente sbagliata")
+			flash.Store(&c.Controller)
+			return
+		}
+
+		//******** Delete user record
+		_, err = o.Delete(&user)
+		if err != nil {
+			flash.Error("Errore Interno - Contattare l'Amministratore del sito")
+			flash.Store(&c.Controller)
+			return
+		}
+		flash.Notice("Il tuo account e' stato cancellato.")
+		flash.Store(&c.Controller)
+		c.DelSession("portale")
+		c.Redirect("/notice", 302)
+
 	}
 }
 

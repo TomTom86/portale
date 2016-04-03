@@ -49,11 +49,11 @@
                                     <span class="glyphicon glyphicon-user"></span> Utente
                                     <span class="caret"></span></a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li class=""><a href="http://{{.domainname}}/user/profile"><span class="fa glyphicon glyphicon-cog  fa-lg"></span> Aggiorna Profilo </a></li>
+                                        <li class=""><a href="http://{{.domainname}}/profile"><span class="fa glyphicon glyphicon-cog  fa-lg"></span> Aggiorna Profilo </a></li>
                                         <li class=""><a href="#"><span class="fa glyphicon glyphicon-envelope fa-lg"></span> Messaggi <span class="fa badge  fa-lg pull-right"> 42 </span></a></li>
                                         <li class=""><a href="#">Autorizzazioni</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="http://{{.domainname}}/user/logout"><span class="fa glyphicon glyphicon-log-out fa-lg"></span> Logout</a></li>
+                                        <li><a href="http://{{.domainname}}/logout"><span class="fa glyphicon glyphicon-log-out fa-lg"></span> Logout</a></li>
                                     </ul>
                             
                         </li>
