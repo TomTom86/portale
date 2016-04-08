@@ -9,11 +9,9 @@ type MainController struct {
 	beego.Controller
 }
 
-
-
 //ErrorController manage error page
 type ErrorController struct {
-    beego.Controller
+    MainController
 }
 
 //Error404 func for 404 error
@@ -75,8 +73,17 @@ func (c *MainController) Get() {
 
 
 //Notice show flash message
+
 func (c *MainController) Notice() {
-	c.activeContent("notice")
+    sess := c.GetSession("portale")
+	if sess != nil {
+        //notice if user is logged
+    	c.activeContent("noticelog")   
+    } else {
+        //notice if user isn't logged
+    	c.activeContent("notice")    
+    }
+
 
 	flash := beego.ReadFromRequest(&c.Controller)
     fmt.Printf(flash.Data["notice"])

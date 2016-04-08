@@ -2,7 +2,7 @@ package routers
 
 import (
 	"portale/controllers"
-    admin "portale/modules/admin/routers"
+    admin "portale/modules/admin/controllers"
 	"github.com/astaxie/beego"
 )
 
@@ -17,6 +17,14 @@ func init() {
     beego.Router("/notice", &controllers.MainController{}, "get:Notice")
     beego.Router("/logout", &controllers.MainController{}, "get:Logout")
     beego.Router("/profile/", &controllers.MainController{}, "get,post:Profile")
-    
-    beego.AddNamespace(admin)
+    //beego.Router("/edit/", &controllers.MainController{}, "get,post:Profile")
+   
+	//beego.Router("/admin/index/:parms", &admin.AdminController{}, "get,post:Index")
+	beego.Router("/admin/add/:parms", &admin.AdminController{}, "get,post:Add")
+	//beego.Router("/admin/update/:username", &admin.AdminController{}, "get,post:Update")
+	beego.Router("/admin/", &admin.AdminController{}, "get,post:Manage")    
+	beego.Router("/admin/:parms", &admin.AdminController{}, "get,post:Manage")
+	beego.Router("/admin/user/:parms", &admin.AdminController{}, "get,post:UsersManage")
+
+       
 }

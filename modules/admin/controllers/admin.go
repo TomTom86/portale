@@ -3,7 +3,6 @@ package admin
 import (
 	pk "portale/utilities/pbkdf2"
 	"portale/models"
-	"portale/controllers"
 	"encoding/hex"
 	"fmt"
 	"github.com/astaxie/beego"
@@ -17,8 +16,42 @@ import (
 	"time"
 )
 
+var (
+	appcfgdomainname        string = beego.AppConfig.String("appcfgdomainname")
+	appcfgMailAccount       string = beego.AppConfig.String("appcfgMailAccount")
+	appcfgMailAccountPsw    string = beego.AppConfig.String("appcfgMailAccountPsw")
+	appcfgMailHost          string = beego.AppConfig.String("appcfgMailHost")
+	appcfgMailHostPort, err        = beego.AppConfig.Int("appcfgMailHostPort")
+)
 
-func (c *MainController) setCompare(query string) (orm.QuerySeter, bool) {
+type AdminController struct {
+	beego.Controller
+    
+}
+
+//activeContnent function build the page
+func (c *AdminController) activeContent(view string) {
+	c.Layout = "basic-layout.tpl"
+	c.Data["domainname"] = beego.AppConfig.String("appcfgdomainname")
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["Header"] = "header.tpl"
+	c.LayoutSections["Footer"] = "footer.tpl"
+	c.TplName = view + ".tpl"
+
+	sess := c.GetSession("portale")
+	if sess != nil {
+		c.Data["InSession"] = 1 // for login bar in header.tpl
+		m := sess.(map[string]interface{})
+		c.Data["First"] = m["first"]
+		c.Data["Admin"] = m["admin"]
+		c.Data["IDkey"] = m["idkey"]
+        fmt.Println(m["portale"])
+		c.Data["Automezzi"] = m["automezzi"]
+	}
+}
+
+
+func (c *AdminController) setCompare(query string) (orm.QuerySeter, bool) {
 
 	o := orm.NewOrm()
 	qs := o.QueryTable("auth_user")
@@ -56,7 +89,7 @@ func (c *MainController) setCompare(query string) (orm.QuerySeter, bool) {
 
 //Manage help administrator to manage all accounts
 //TODO ordinare i nomi maiuscolo e minuscolo assieme
-func (c *MainController) Manage() {
+func (c *AdminController) Manage() {
 	// Only administrator can Manage accounts
 	c.activeContent("admin/manage")
 
@@ -79,7 +112,7 @@ func (c *MainController) Manage() {
 	fmt.Printf("hai i diritti")
 
 	//in caso di panic reindirizza alla home
-	defer func(c *MainController) {
+	defer func(c *AdminController) {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered in Index", r)
 			c.Redirect("/", 302)
@@ -103,14 +136,14 @@ func (c *MainController) Manage() {
 		for i := range users {
 			fmt.Println(users[i])
 		}
-		rows := "<tr><center><td>ID</td><td>NOME</td><td>COGNOME</td><td>EMAIL</td><td>MODIFICA</td></center></tr>"
+		rows := "<tr class='tabmenu'><td>ID</td><td>NOME</td><td>COGNOME</td><td>EMAIL</td><td>MODIFICA</td></tr>"
 		for i := range users {
             /*
 			rows += fmt.Sprintf("<tr><td>%d</td>"+
-				"<td>%s</td><td>%s</td><td>%s</td><td><center><a href='http://%s/manage/user/%s' class=\"user\"> </a></center></td></tr>", users[i].ID, users[i].First, users[i].Last, users[i].Email, appcfgdomainname, users[i].IDkey)
+				"<td>%s</td><td>%s</td><td>%s</td><td><center><a href='http://%s/user/%s' class=\"user\"> </a></center></td></tr>", users[i].ID, users[i].First, users[i].Last, users[i].Email, appcfgdomainname, users[i].IDkey)
 	        */
             rows += fmt.Sprintf("<tr><td>%d</td>"+
-				"<td>%s</td><td>%s</td><td>%s</td><td><center><a href='http://%s/manage/user/%s'><i class=\"glyphicon glyphicon-pencil\"></i></a> </center></td></tr>", users[i].ID, users[i].First, users[i].Last, users[i].Email, appcfgdomainname, users[i].IDkey)
+				"<td>%s</td><td>%s</td><td>%s</td><td><center><a class='btn btn-defalut btn-xs' href='http://%s/admin/user/%s'><span class='glyphicon glyphicon-edit'></span> Modifica</a></center></td></tr>", users[i].ID, users[i].First, users[i].Last, users[i].Email, appcfgdomainname, users[i].IDkey)
         	
     }
 		c.Data["Rows"] = template.HTML(rows)
@@ -153,7 +186,7 @@ func (c *MainController) Manage() {
     /*TABELLA IN BASE AI PARAMETRI*/
 	for i := range users {
 		rows += fmt.Sprintf("<tr><td>%d</td>"+
-				"<td>%s</td><td>%s</td><td>%s</td><td><center><a href='http://%s/manage/user/%s'><i class=\"glyphicon glyphicon-pencil\"></i></a></center></td></tr>", users[i].ID, users[i].First, users[i].Last, users[i].Email, appcfgdomainname, users[i].IDkey)
+				"<td>%s</td><td>%s</td><td>%s</td><td><center><a class='btn btn-defalut btn-xs' href='http://%s/admin/user/%s'><span class='glyphicon glyphicon-edit'></span> Modifica</a></center></td></tr>", users[i].ID, users[i].First, users[i].Last, users[i].Email, appcfgdomainname, users[i].IDkey)
 	}
 	c.Data["Rows"] = template.HTML(rows)
 
@@ -180,8 +213,8 @@ func (c *MainController) Manage() {
 
 //UsersManage is for edit accounts by administrator
 //TODO quando ritorna al manage lo fa nella pagina 1 e non in quella in cui si trovava l'utente
-func (c *MainController) UsersManage() {
-	c.activeContent("manage/user")
+func (c *AdminController) UsersManage() {
+	c.activeContent("admin/user")
 
 	//******** c page requires login
 	sess := c.GetSession("portale")
@@ -233,7 +266,7 @@ func (c *MainController) UsersManage() {
 	}
 
 	// c deferred function ensures that the correct fields from the database are displayed
-	defer func(c *MainController, user *models.AuthUser, userAPP *models.AuthApp) {
+	defer func(c *AdminController, user *models.AuthUser, userAPP *models.AuthApp) {
 		//check the user lvl
 		var userlvllist string
 		switch user.Group {
@@ -264,24 +297,24 @@ func (c *MainController) UsersManage() {
 		fmt.Println(user.BlockControll)
 		var checkbloccato string
 		if user.BlockControll >= 3 {
-			checkbloccato += fmt.Sprintf("<td><input type=\"checkbox\" name=\"blocco\" value=\"bloccato\" checked=\"checked\"> BLOCCATO<br></td>")
+			checkbloccato += fmt.Sprintf("<td><input type=\"checkbox\" id=\"blocco\" name=\"blocco\" value=\"bloccato\" checked=\"checked\"> BLOCCATO<br></td>")
 			//<td><input type="checkbox" name="apps" value="bloccato"> BLOCCATO<br></td>
 		} else {
-			checkbloccato += fmt.Sprintf("<td><input type=\"checkbox\" name=\"blocco\" value=\"bloccato\"> BLOCCATO<br></td>")
+			checkbloccato += fmt.Sprintf("<td><input type=\"checkbox\" id=\"blocco\" name=\"blocco\" value=\"bloccato\"> BLOCCATO<br></td>")
 
 		}
 
 		//check the app authorization
 		var checkautomezzi, checkservizi string
 		if userAPP.Automezzi {
-			checkautomezzi += fmt.Sprintf("<input type=\"checkbox\" name=\"apps\" value=\"automezzi\" checked=\"checked\"> Automezzi<br>")
+			checkautomezzi += fmt.Sprintf("<input type=\"checkbox\" id=\"apps\" name=\"apps\" value=\"automezzi\" checked=\"checked\"> Automezzi<br>")
 		} else {
-			checkautomezzi += fmt.Sprintf("<input type=\"checkbox\" name=\"apps\" value=\"automezzi\"> Automezzi<br>")
+			checkautomezzi += fmt.Sprintf("<input type=\"checkbox\" id=\"apps\" name=\"apps\" value=\"automezzi\"> Automezzi<br>")
 		}
 		if userAPP.Servizi {
-			checkservizi += fmt.Sprintf("<input type=\"checkbox\" name=\"apps\" value=\"servizi\" checked=\"checked\"> Servizi<br>")
+			checkservizi += fmt.Sprintf("<input type=\"checkbox\" id=\"apps\" name=\"apps\" value=\"servizi\" checked=\"checked\"> Servizi<br>")
 		} else {
-			checkservizi += fmt.Sprintf("<input type=\"checkbox\" name=\"apps\" value=\"servizi\"> Servizi<br>")
+			checkservizi += fmt.Sprintf("<input type=\"checkbox\" id=\"apps\" name=\"apps\" value=\"servizi\"> Servizi<br>")
 		}
 
 		c.Data["UFirst"] = user.First
@@ -291,6 +324,10 @@ func (c *MainController) UsersManage() {
 		c.Data["Checkbloccato"] = template.HTML(checkbloccato)
 		c.Data["Checkautomezzi"] = template.HTML(checkautomezzi)
 		c.Data["Checkservizi"] = template.HTML(checkservizi)
+        c.Data["IDkey"] = user.IDkey
+		c.Data["RegDate"] = user.RegDate
+		c.Data["ResetKey"] = user.ResetKey
+        
 	}(c, &user, &userAPP)
 
         //XSRF attack defense
@@ -424,9 +461,9 @@ func max(a, b int64) int64 {
 	}
 	return a
 }
-
-func (c *MainController) Index() {
-	c.activeAdminContent("appadmin/index")
+/*
+func (c *AdminController) Index() {
+	c.activeContent("admin/index")
 
 	sess := c.GetSession("portale")
 	if sess == nil {
@@ -444,7 +481,7 @@ func (c *MainController) Index() {
 	}
 	fmt.Printf("hai i diritti")
 
-	defer func(c *MainController) {
+	defer func(c *AdminController) {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered in Index", r)
 			c.Redirect("/", 302)
@@ -488,7 +525,7 @@ func (c *MainController) Index() {
 	domainname := c.Data["domainname"]
 	for x := range users {
 		i := strings.Index(users[x].RegDate.String(), " ")
-		rows += fmt.Sprintf("<tr><td><a href='http://%s/appadmin/update/%s!%s'>%d</a></td>"+
+		rows += fmt.Sprintf("<tr><td><a href='http://%s/admin/update/%s!%s'>%d</a></td>"+
 			"<td>%s</td><td>%s</td><td>%s</td><td>%s...</td><td>%s</td><td>%s</td><td>%s</td></tr>", domainname, users[x].Email, parms,
 			users[x].ID, users[x].First, users[x].Last, users[x].Email, users[x].Password[:20],
 			users[x].IDkey, users[x].RegDate.String()[:i], users[x].ResetKey)
@@ -515,9 +552,9 @@ func (c *MainController) Index() {
 	c.Data["progress"] = float64(offset*100) / float64(max(count, 1))
 
 }
-
-func (c *MainController) Add() {
-	c.activeAdminContent("admin/add")
+*/
+func (c *AdminController) Add() {
+	c.activeContent("admin/add")
 
 	sess := c.GetSession("portale")
 	if sess == nil {
@@ -588,6 +625,7 @@ func (c *MainController) Add() {
 
 		flash.Notice("User added")
 		flash.Store(&c.Controller)
+        c.Redirect("/notice", 302)
 	}
 
 }
@@ -600,14 +638,15 @@ type authUser struct {
 	Password   string `form:"password" valid:"MinSize(6)"`
 	IDkey      string `form:"idkey"`
 	IsApproved bool
+    BlockControll bool
 	RegDate    string `form:"regdate"` // ParseForm cannot deal with time.Time in the form definition
 	ResetKey   string `form:"resetkey"`
 	Delete     string `form:"delete,checkbox"`
 }
 
 //Update account information
-func (c *MainController) Update() {
-	c.activeAdminContent("appadmin/update")
+/*func (c *AdminController) Update() {
+	c.activeContent("admin/update")
 	sess := c.GetSession("portale")
 	//if you aren't logged redirect to home
 	if sess == nil {
@@ -625,7 +664,7 @@ func (c *MainController) Update() {
 		c.Redirect("/notice", 302)
 	}
 	fmt.Printf("hai i diritti")
-	defer func(c *MainController) {
+	defer func(c *AdminController) {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered in Update", r)
 			c.Redirect("/home", 302)
@@ -697,3 +736,4 @@ func (c *MainController) Update() {
 		c.Data["User"] = user
 	}
 }
+*/

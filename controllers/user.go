@@ -275,10 +275,10 @@ type message struct {
 
 //S endComunication func get smtp setting from app.conf and send e-mail
 func sendComunication(email message) bool {
-	//fmt.Println(appcfgMailHost)
-	//fmt.Println(appcfgMailHostPort)
-	//fmt.Println(appcfgMailAccount)
-	//fmt.Println(appcfgMailAccountPsw)
+	fmt.Println(appcfgMailHost)
+	fmt.Println(appcfgMailHostPort)
+	fmt.Println(appcfgMailAccount)
+	fmt.Println(appcfgMailAccountPsw)
 	msg := gomail.NewMessage()
 	msg.SetHeader("From", appcfgMailAccount, "E' Cosi'")
 	msg.SetHeader("To", email.Email)

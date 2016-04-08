@@ -13,7 +13,10 @@ import (
 func init() {
 	orm.RegisterDriver("sqlite", orm.DRSqlite)
 	orm.RegisterDataBase("default", "sqlite3", "portaledb.db")
-	orm.Debug = true
+    if beego.AppConfig.String("runmode") == "dev" {
+		orm.Debug = true
+	}
+
 	name := "default"
 	force := false
 	verbose := false
@@ -21,12 +24,14 @@ func init() {
 	if err != nil {
 		fmt.Println(err)
 	}
-
+    
+    beego.BConfig.WebConfig.Session.SessionOn = true
+    beego.BConfig.WebConfig.EnableXSRF = true
 }
 
 func main() {
-    beego.BConfig.WebConfig.Session.SessionOn = true
-    beego.BConfig.WebConfig.EnableXSRF = true
+
+
     beego.ErrorController(&controllers.ErrorController{})
 	beego.Run()
 }

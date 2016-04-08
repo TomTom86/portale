@@ -34,7 +34,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#">
+			<a class="navbar-brand" href="http://{{.domainname}}/">
 				<img id="brand" src="/static/img/logo80.png"> </img>
 			</a>
 	    </div>
@@ -114,8 +114,7 @@
                                 </li>
                                 {{end}}
                                 {{if .Admin}}
-                                <li><a href="http://{{.domainname}}/manage/id!0!id__gte,0"><span class="glyphicon glyphicon-cog"></span> Sicurezza</a></li>
-                                <li><a href="http://{{.domainname}}/appadmin/index/id!0!id__gte,0"><span class="fa glyphicon glyphicon-cog fa-lg"></span> Pannello Admin</a></li>
+                                <li><a href="http://{{.domainname}}/admin/id!0!id__gte,0"><span class="glyphicon glyphicon-cog"></span> Gestione Utenti</a></li>
                                 {{end}}
                             </ul>
                         </div><!-- /.navbar-collapse -->
