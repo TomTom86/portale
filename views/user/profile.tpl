@@ -4,21 +4,36 @@
             <h1>{{.First}} {{.Last}}</h1>
         </div>
         <div class="panel-body">
-
             {{if .flash.error}}
-            &nbsp;
-            <h3>{{.flash.error}}</h3>
-            &nbsp;
-            {{end}}{{if .flash.notice}}
-            <h3>{{.flash.notice}}</h3>
-            &nbsp;
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    ×</button>
+                <span class="glyphicon glyphicon-hand-right"></span> <strong> ATTENZIONE - Errore</strong>
+                <hr class="message-inner-separator">
+                {{.flash.error}}.
+            </div>
             {{end}}
+            {{if .flash.notice}}
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    ×</button>
+               <span class="glyphicon glyphicon-ok"></span> <strong>Operazione completata con successo</strong>
+                <hr class="message-inner-separator">
+                {{.flash.notice}}.
+            </div>
+            {{end}}            
             {{if .Errors}}
             {{range $rec := .Errors}}
-            <h3>{{$rec}}</h3>
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    ×</button>
+                <span class="glyphicon glyphicon-hand-right"></span> <strong> ATTENZIONE - Errore</strong>
+                <hr class="message-inner-separator">
+                {{$rec}}.
+            </div>      
             {{end}}
             &nbsp;
-            {{end}}
+            {{end}}            
             <form class="form-horizontal" method="POST">
                 {{.xsrfdata}}
                 <!-- Nome input-->

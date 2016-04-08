@@ -8,20 +8,30 @@
                     <div id="brand">&nbsp</div>
                     &nbsp;
                     {{if .flash.error}}
-                    <h3>{{.flash.error}}</h3>
-                    &nbsp;
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                            ×</button>
+                        <span class="glyphicon glyphicon-hand-right"></span> <strong> ATTENZIONE - Errore</strong>
+                        <hr class="message-inner-separator">
+                        {{.flash.error}}.
+                    </div>
                     {{end}}
                     {{if .Errors}}
                     {{range $rec := .Errors}}
-                    <h3>{{$rec}}</h3>
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                            ×</button>
+                        <span class="glyphicon glyphicon-hand-right"></span> <strong> ATTENZIONE - Errore</strong>
+                        <hr class="message-inner-separator">
+                        {{$rec}}.
+                    </div>      
                     {{end}}
                     &nbsp;
                     {{end}}
-                        &nbsp
                     <form method="POST">
                         {{.xsrfdata}}
-                        <input type="text" name="email" placeholder="Username">
-                        <input type="password" name="password" placeholder="Password">
+                        <input type="text" name="email" placeholder="Username" required="">
+                        <input type="password" name="password" placeholder="Password" required="">
                         <input type="submit" name="login" value="Login" class="login loginmodal-submit" value="Login">
                     </form>
                         

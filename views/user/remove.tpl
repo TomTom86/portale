@@ -1,17 +1,27 @@
 <div id="content">
 <h1>Remove User Account</h1>
 &nbsp;
-{{if .flash.error}}
-<h3>{{.flash.error}}</h3>
-&nbsp;
-{{end}}
-{{if .Errors}}
-{{range $rec := .Errors}}
-<h3>{{$rec}}</h3>
-{{end}}
-&nbsp;
-{{end}}
-
+            {{if .flash.error}}
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    ×</button>
+                <span class="glyphicon glyphicon-hand-right"></span> <strong> ATTENZIONE - Errore</strong>
+                <hr class="message-inner-separator">
+                {{.flash.error}}.
+            </div>
+            {{end}}           
+            {{if .Errors}}
+            {{range $rec := .Errors}}
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    ×</button>
+                <span class="glyphicon glyphicon-hand-right"></span> <strong> ATTENZIONE - Errore</strong>
+                <hr class="message-inner-separator">
+                {{$rec}}.
+            </div>      
+            {{end}}
+            &nbsp;
+            {{end}} 
 
 <div class="col-md-10 content">
         <div class="panel panel-default">

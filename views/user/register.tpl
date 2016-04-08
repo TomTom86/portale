@@ -7,10 +7,15 @@
                                         &nbsp;
                     
                     {{if .flash.error}}
-                    <h3>{{.flash.error}}</h3>
-                    &nbsp;
-                    {{end}}{{if .flash.notice}}
-                    <h3>{{.flash.notice}}</h3>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                    ×</button>
+                                <span class="glyphicon glyphicon-hand-right"></span> <strong>Errore</strong>
+                                <hr class="message-inner-separator">
+                                <p>{{.flash.error}}.</p>
+                            </div>
+                        </div>                    
                     &nbsp;
                     {{end}}
                     <form method="POST"> 

@@ -1,31 +1,47 @@
 <div class="col-md-10 content">
         <div class="panel panel-default">
         <div class="panel-heading">
-            <h1>Aggiungi Utente</h1>
+            <h3>Aggiungi Utente</h3>
         </div>
         <div class="panel-body">
-                <div id="content">
-                &nbsp;
+
                 {{if .flash.error}}
-                <h3>{{.flash.error}}</h3>
-                &nbsp;
-                {{end}}{{if .flash.notice}}
-                <h3>{{.flash.notice}}</h3>
-                &nbsp;
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                        ×</button>
+                    <span class="glyphicon glyphicon-hand-right"></span> <strong> ATTENZIONE - Errore</strong>
+                    <hr class="message-inner-separator">
+                    {{.flash.error}}.
+                </div>
                 {{end}}
+                {{if .flash.notice}}
+                <div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                        ×</button>
+                <span class="glyphicon glyphicon-ok"></span> <strong>Operazione completata con successo</strong>
+                    <hr class="message-inner-separator">
+                    {{.flash.notice}}.
+                </div>
+                {{end}}            
                 {{if .Errors}}
                 {{range $rec := .Errors}}
-                <h3>{{$rec}}</h3>
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                        ×</button>
+                    <span class="glyphicon glyphicon-hand-right"></span> <strong> ATTENZIONE - Errore</strong>
+                    <hr class="message-inner-separator">
+                    {{$rec}}.
+                </div>      
                 {{end}}
                 &nbsp;
-                {{end}}
+                {{end}} 
                 <form method="POST">
                 {{ .xsrfdata }}   
                     <table>
-                    <tr><td>First: {{if .Errors.First}}{{.Errors.First}}{{end}}</td><td><input name="first" value="{{.User.First}}" size="30" /></td></tr>
-                    <tr><td>Last:</td><td><input name="last" value="{{.User.Last}}" size="30" /></td></tr>
-                    <tr><td>Email:  {{if .Errors.Email}}{{.Errors.Email}}{{end}}</td><td><input name="email" value="{{.User.Email}}" size="30" /></td></tr>
-                    <tr><td>Password: {{if .Errors.Password}}{{.Errors.Password}}{{end}}</td><td><input name="password" value="{{.User.Password}}" size="30" /></td></tr>
+                    <tr><td><label class="control-label" for="first">Nome: </label></td><td><input name="first" value="{{.User.First}}" size="30" required=""/>{{if .Errors.First}}  {{.Errors.First}}  {{end}}</td></tr>
+                    <tr><td><label class="control-label" for="last">Cognome: </label></td><td><input name="last" value="{{.User.Last}}" size="30" required=""/></td></tr>
+                    <tr><td><label class="control-label" for="email">Email: </label></td><td><input name="email" value="{{.User.Email}}" size="30" required=""/>{{if .Errors.Email}}  {{.Errors.Email}}  {{end}}</td></tr>
+                    <tr><td><label class="control-label" for="password">Password: </label></td><td><input name="password" value="{{.User.Password}}" size="30" required=""/>{{if .Errors.Password}}  {{.Errors.Password}}  {{end}}</td></tr>
                     <tr><td>&nbsp;</td></tr>
                     <tr>
                         <td>&nbsp;</td><td><input type="submit" value="Add" /></td>
@@ -34,7 +50,7 @@
                         <a href="http://{{.domainname}}/admin/{{.parms}}" >Indietro</a>
                 </form>
                 </div>
-        </div>
+
         </div>
 
 </div>

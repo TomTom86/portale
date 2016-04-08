@@ -2,7 +2,7 @@
                 <div class="loginmodal-container">
                 <div id="brand">&nbsp</div>
                 &nbsp;
-                <p>{{.flash.notice}}</p>
+                {{.flash.notice}}
                     &nbsp
                     &nbsp
                 <div class="login-help">

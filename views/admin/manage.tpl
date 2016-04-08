@@ -6,19 +6,35 @@
         </div>
         <div class="panel-body">           
             {{if .flash.error}}
-                <h3>{{.flash.error}}</h3>
-                &nbsp;
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    ×</button>
+                <span class="glyphicon glyphicon-hand-right"></span> <strong> ATTENZIONE - Errore</strong>
+                <hr class="message-inner-separator">
+                {{.flash.error}}.
+            </div>
             {{end}}
             {{if .flash.notice}}
-                <h3>{{.flash.notice}}</h3>
-                &nbsp;
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    ×</button>
+               <span class="glyphicon glyphicon-ok"></span> <strong>Operazione completata con successo</strong>
+                <hr class="message-inner-separator">
+                {{.flash.notice}}.
+            </div>
+            {{end}}            
+            {{if .Errors}}
+            {{range $rec := .Errors}}
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    ×</button>
+                <span class="glyphicon glyphicon-hand-right"></span> <strong> ATTENZIONE - Errore</strong>
+                <hr class="message-inner-separator">
+                {{$rec}}.
+            </div>      
             {{end}}
-                {{if .Errors}}
-                {{range $rec := .Errors}}
-                <h3>{{$rec}}</h3>
-                {{end}}
             &nbsp;
-            {{end}}
+            {{end}} 
             <div class="form-group  col-lg-2">
                 <div class="btn-toolbar pull-left">
                     <button class="btn btn-primary" onclick="location.href='http://{{.domainname}}/admin/add/id!0!id__gte,0'">+ Nuovo Utente</button>
