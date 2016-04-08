@@ -30,6 +30,7 @@ type AuthApp struct {
 	Automezzi bool
 	Servizi   bool
 	AuthUser  *AuthUser `orm:"reverse(one)"`
+
 }
 
 

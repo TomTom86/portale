@@ -3,6 +3,7 @@ package main
 import (
     "fmt"
     "portale/controllers"
+    automezzi "portale/modules/automezzi/controllers"
 	_ "portale/routers"
 	"github.com/astaxie/beego"
     
@@ -33,6 +34,7 @@ func main() {
 
 
     beego.ErrorController(&controllers.ErrorController{})
+    automezzi.InitializeModule()
 	beego.Run()
 }
 
