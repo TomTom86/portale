@@ -17,31 +17,77 @@ $(function () {
 Please consider that the JS part isn't production ready at all, I just code it to show the concept of merging filters and titles together !
 */
 $(document).ready(function(){
-    document.getElementById("idsearch").style.visibility = "hidden";
-    document.getElementById("firstsearch").style.visibility = "hidden";
-    document.getElementById("lastsearch").style.visibility = "hidden";
-    document.getElementById("emailsearch").style.visibility = "hidden";
-    $('.filterable .btn-filter').click(function(){
-        var $panel = $(this).parents('.filterable'),
-        $filters = $panel.find('.filters input'),
-        $tbody = $panel.find('.table tbody');
-        if ($filters.prop('disabled') == true) {
-            $filters.prop('disabled', false);
-            document.getElementById("idsearch").style.visibility = "visible";
-            document.getElementById("firstsearch").style.visibility = "visible";
-            document.getElementById("lastsearch").style.visibility = "visible";
-            document.getElementById("emailsearch").style.visibility = "visible";
-            $filters.first().focus();
-        } else {
-            $filters.val('').prop('disabled', true);
-            document.getElementById("idsearch").style.visibility = "hidden";
-            document.getElementById("firstsearch").style.visibility = "hidden";
-            document.getElementById("lastsearch").style.visibility = "hidden";
-            document.getElementById("emailsearch").style.visibility = "hidden";
-            $tbody.find('.no-result').remove();
-            $tbody.find('tr').show();
+    if (document.getElementById("idsearch") && document.getElementById("firstsearch") && document.getElementById("lastsearch") && document.getElementById("emailsearch")){
+        document.getElementById("idsearch").style.visibility = "hidden";
+        document.getElementById("firstsearch").style.visibility = "hidden";
+        document.getElementById("lastsearch").style.visibility = "hidden";
+        document.getElementById("emailsearch").style.visibility = "hidden";
+        $('.filterable .btn-filter').click(function(){
+            var $panel = $(this).parents('.filterable'),
+            $filters = $panel.find('.filters input'),
+            $tbody = $panel.find('.table tbody');
+            if ($filters.prop('disabled') == true) {
+                $filters.prop('disabled', false);
+                document.getElementById("idsearch").style.visibility = "visible";
+                document.getElementById("firstsearch").style.visibility = "visible";
+                document.getElementById("lastsearch").style.visibility = "visible";
+                document.getElementById("emailsearch").style.visibility = "visible";
+                $filters.first().focus();
+            } else {
+                $filters.val('').prop('disabled', true);
+                document.getElementById("idsearch").style.visibility = "hidden";
+                document.getElementById("firstsearch").style.visibility = "hidden";
+                document.getElementById("lastsearch").style.visibility = "hidden";
+                document.getElementById("emailsearch").style.visibility = "hidden";
+                $tbody.find('.no-result').remove();
+                $tbody.find('tr').show();
+            }
+        });  
+    } else {
+        if (document.getElementById("descrsearch") && document.getElementById("pisearch")){
+        document.getElementById("descrsearch").style.visibility = "hidden";
+        document.getElementById("pisearch").style.visibility = "hidden";
+        $('.filterable .btn-filter').click(function(){
+            var $panel = $(this).parents('.filterable'),
+            $filters = $panel.find('.filters input'),
+            $tbody = $panel.find('.table tbody');
+            if ($filters.prop('disabled') == true) {
+                $filters.prop('disabled', false);
+                document.getElementById("descrsearch").style.visibility = "visible";
+                document.getElementById("pisearch").style.visibility = "visible";
+                $filters.first().focus();
+            } else {
+                $filters.val('').prop('disabled', true);
+                document.getElementById("descrsearch").style.visibility = "hidden";
+                document.getElementById("pisearch").style.visibility = "hidden";
+                $tbody.find('tr').show();
+            }
+        });  
+        } else if (document.getElementById("ncontrsearch") && document.getElementById("datasearch") && document.getElementById("fornsearch")){
+            document.getElementById("ncontrsearch").style.visibility = "hidden";
+            document.getElementById("datasearch").style.visibility = "hidden";
+            document.getElementById("fornsearch").style.visibility = "hidden";
+            $('.filterable .btn-filter').click(function(){
+                var $panel = $(this).parents('.filterable'),
+                $filters = $panel.find('.filters input'),
+                $tbody = $panel.find('.table tbody');
+                if ($filters.prop('disabled') == true) {
+                    $filters.prop('disabled', false);
+                    document.getElementById("ncontrsearch").style.visibility = "visible";
+                    document.getElementById("datasearch").style.visibility = "visible";
+                    document.getElementById("fornsearch").style.visibility = "visible";
+                    $filters.first().focus();
+                } else {
+                    $filters.val('').prop('disabled', true);
+                    document.getElementById("ncontrsearch").style.visibility = "hidden";
+                    document.getElementById("datasearch").style.visibility = "hidden";
+                    document.getElementById("fornsearch").style.visibility = "hidden";
+                    $tbody.find('tr').show();
+                }
+            });  
         }
-    });
+    }
+
 
     $('.filterable .filters input').keyup(function(e){
         /* Ignore tab key */

@@ -1,19 +1,20 @@
 package admin
 
 import (
-	pk "portale/utilities/pbkdf2"
-	"portale/models"
 	"encoding/hex"
 	"fmt"
+	"html/template"
+	"portale/models"
+	pk "portale/utilities/pbkdf2"
+	"reflect"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
 	"github.com/twinj/uuid"
-	"html/template"
-	"strconv"
-	"strings"
-	"reflect"
-	"time"
 )
 
 var (
@@ -26,7 +27,6 @@ var (
 
 type AdminController struct {
 	beego.Controller
-    
 }
 
 //activeContnent function build the page
@@ -45,18 +45,17 @@ func (c *AdminController) activeContent(view string) {
 		c.Data["First"] = m["first"]
 		c.Data["Admin"] = m["admin"]
 		c.Data["IDkey"] = m["idkey"]
-        fmt.Println(m["portale"])
+		fmt.Println(m["portale"])
 		c.Data["Automezzi"] = m["automezzi"]
 	}
 }
-
 
 func (c *AdminController) setCompare(query string) (orm.QuerySeter, bool) {
 
 	o := orm.NewOrm()
 	qs := o.QueryTable("auth_user")
-        //XSRF attack defense
-    c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	//XSRF attack defense
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	if c.Ctx.Input.Method() == "POST" {
 		f := compareform{}
 		if err := c.ParseForm(&f); err != nil {
@@ -126,29 +125,30 @@ func (c *AdminController) Manage() {
 		var users []models.AuthUser
 
 		o.QueryTable("auth_user")
+		//FORSE NON SERVE QUELLO SOTTO
 		if err != nil {
 			flash.Notice("Errore, contattare l'amministratore del sito")
 			flash.Store(&c.Controller)
 			c.Redirect("/notice", 302)
 		}
-        /*QUANDO NON CI SONO PARAMETRI??*/
+		/*QUANDO NON CI SONO PARAMETRI??*/
 		//fmt.Println("user nums: ", num)
 		for i := range users {
 			fmt.Println(users[i])
 		}
 		rows := "<tr class='tabmenu'><td>ID</td><td>NOME</td><td>COGNOME</td><td>EMAIL</td><td>MODIFICA</td></tr>"
 		for i := range users {
-            /*
+			/*
+				rows += fmt.Sprintf("<tr><td>%d</td>"+
+					"<td>%s</td><td>%s</td><td>%s</td><td><center><a href='http://%s/user/%s' class=\"user\"> </a></center></td></tr>", users[i].ID, users[i].First, users[i].Last, users[i].Email, appcfgdomainname, users[i].IDkey)
+			*/
 			rows += fmt.Sprintf("<tr><td>%d</td>"+
-				"<td>%s</td><td>%s</td><td>%s</td><td><center><a href='http://%s/user/%s' class=\"user\"> </a></center></td></tr>", users[i].ID, users[i].First, users[i].Last, users[i].Email, appcfgdomainname, users[i].IDkey)
-	        */
-            rows += fmt.Sprintf("<tr><td>%d</td>"+
 				"<td>%s</td><td>%s</td><td>%s</td><td><center><a class='btn btn-defalut btn-xs' href='http://%s/admin/user/%s'><span class='glyphicon glyphicon-edit'></span> Modifica</a></center></td></tr>", users[i].ID, users[i].First, users[i].Last, users[i].Email, appcfgdomainname, users[i].IDkey)
-        	
-    }
+
+		}
 		c.Data["Rows"] = template.HTML(rows)
 	}
-    //parametro serve per suddividere in pagine l'elenco utenti
+	//parametro serve per suddividere in pagine l'elenco utenti
 	const pagesize = 10
 	parms := c.Ctx.Input.Param(":parms")
 	c.Data["parms"] = parms
@@ -183,10 +183,10 @@ func (c *AdminController) Manage() {
 	if err != nil {
 		fmt.Println("Query table failed:", err)
 	}
-    /*TABELLA IN BASE AI PARAMETRI*/
+	/*TABELLA IN BASE AI PARAMETRI*/
 	for i := range users {
 		rows += fmt.Sprintf("<tr><td>%d</td>"+
-				"<td>%s</td><td>%s</td><td>%s</td><td><center><a class='btn btn-defalut btn-xs' href='http://%s/admin/user/%s'><span class='glyphicon glyphicon-edit'></span> Modifica</a></center></td></tr>", users[i].ID, users[i].First, users[i].Last, users[i].Email, appcfgdomainname, users[i].IDkey)
+			"<td>%s</td><td>%s</td><td>%s</td><td><center><a class='btn btn-defalut btn-xs' href='http://%s/admin/user/%s'><span class='glyphicon glyphicon-edit'></span> Modifica</a></center></td></tr>", users[i].ID, users[i].First, users[i].Last, users[i].Email, appcfgdomainname, users[i].IDkey)
 	}
 	c.Data["Rows"] = template.HTML(rows)
 
@@ -213,6 +213,7 @@ func (c *AdminController) Manage() {
 
 //UsersManage is for edit accounts by administrator
 //TODO quando ritorna al manage lo fa nella pagina 1 e non in quella in cui si trovava l'utente
+//Basta aggiungere in fondo al link la pagina in cui si è e sostituire il link nel pulsante "indietro"
 func (c *AdminController) UsersManage() {
 	c.activeContent("admin/user")
 
@@ -324,14 +325,14 @@ func (c *AdminController) UsersManage() {
 		c.Data["Checkbloccato"] = template.HTML(checkbloccato)
 		c.Data["Checkautomezzi"] = template.HTML(checkautomezzi)
 		c.Data["Checkservizi"] = template.HTML(checkservizi)
-        c.Data["IDkey"] = user.IDkey
+		c.Data["IDkey"] = user.IDkey
 		c.Data["RegDate"] = user.RegDate
 		c.Data["ResetKey"] = user.ResetKey
-        
+
 	}(c, &user, &userAPP)
 
-        //XSRF attack defense
-    c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	//XSRF attack defense
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	if c.Ctx.Input.Method() == "POST" {
 		first := c.GetString("first")
 		last := c.GetString("last")
@@ -454,13 +455,13 @@ type compareform struct {
 	Compareval   string `form:"compareval" valid:"Required"`
 }
 
-
 func max(a, b int64) int64 {
 	if a < b {
 		return b
 	}
 	return a
 }
+
 /*
 func (c *AdminController) Index() {
 	c.activeContent("admin/index")
@@ -574,9 +575,9 @@ func (c *AdminController) Add() {
 	parms := c.Ctx.Input.Param(":parms")
 	fmt.Println(parms)
 	c.Data["parms"] = parms
-    
-        //XSRF attack defense
-    c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+
+	//XSRF attack defense
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	if c.Ctx.Input.Method() == "POST" {
 
 		u := authUser{}
@@ -625,23 +626,23 @@ func (c *AdminController) Add() {
 
 		flash.Notice("User added")
 		flash.Store(&c.Controller)
-        c.Redirect("/notice", 302)
+		c.Redirect("/notice", 302)
 	}
 
 }
 
 type authUser struct {
-	ID         int    `form:"id"`
-	First      string `form:"first" valid:"Required"`
-	Last       string `form:"last"`
-	Email      string `form:"email" valid:"Email"`
-	Password   string `form:"password" valid:"MinSize(6)"`
-	IDkey      string `form:"idkey"`
-	IsApproved bool
-    BlockControll bool
-	RegDate    string `form:"regdate"` // ParseForm cannot deal with time.Time in the form definition
-	ResetKey   string `form:"resetkey"`
-	Delete     string `form:"delete,checkbox"`
+	ID            int    `form:"id"`
+	First         string `form:"first" valid:"Required"`
+	Last          string `form:"last"`
+	Email         string `form:"email" valid:"Email"`
+	Password      string `form:"password" valid:"MinSize(6)"`
+	IDkey         string `form:"idkey"`
+	IsApproved    bool
+	BlockControll bool
+	RegDate       string `form:"regdate"` // ParseForm cannot deal with time.Time in the form definition
+	ResetKey      string `form:"resetkey"`
+	Delete        string `form:"delete,checkbox"`
 }
 
 //Update account information

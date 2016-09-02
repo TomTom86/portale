@@ -1,19 +1,19 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 //***********DB AUTOMEZZI**************
 
-
 //VeicoliDG contiene dati veicolo
 type VeicoliDG struct {
 	ID             int             `orm:"auto;unique"`
-	Targa          string          `orm:"unique"`
-	DataInFlotta   time.Time       `orm:"type(date)"`
-	DataFineFlotta time.Time       `orm:"type(date)"`
+	Targa          string          `orm:"unique;size(7);not null"`
+	DataInFlotta   string          `orm:"size(10)"`
+	DataFineFlotta string          `orm:"type(date)"`
 	Note           string          `orm:"null;size(100)"`
 	VeicoliDT      *VeicoliDT      `orm:"rel(one)"`
 	TipiVeicolo    *TipiVeicolo    `orm:"rel(fk)"`
@@ -29,25 +29,25 @@ type VeicoliDG struct {
 
 //VeicoliDT contiene le specifiche tecniche veicolo
 type VeicoliDT struct {
-	ID                int             `orm:"pk;not null;auto;unique"`
-	AnnoImmatricolazione time.Time       `orm:"type(date)"`
-	NLibretto         int             `orm:"null"`
-	NTelaio           int             `orm:"null"`
-	Marca             string          `orm:"size(7)"`
-	Modello           string          `orm:"size(40)"`
-	NorEuro           int             `orm:"null"`
-	Kw                int             `orm:"null"`
-	Cilindrata        int             `orm:"null"`
-	ConsumoTeorico    int             `orm:"null"`
-	KmAnno            int             `orm:"null"`
-	CostoKm           int             `orm:"null;digits(12);decimals(4)"`
-	Pneumatici        string          `orm:"null;size(20)"`
-	VeicoliDG         *VeicoliDG      `orm:"reverse(one)"`
-	Allegati          []*Allegati     `orm:"rel(m2m)"`
-	Carburante        *Carburante     `orm:"rel(fk)"`
-	ContrAcquisti     *ContrAcquisti  `orm:"rel(fk)"`
-	ContrLeasing      []*ContrLeasing `orm:"rel(m2m)"`
-	ContrNoleggi      []*ContrNoleggi `orm:"rel(m2m)"`
+	ID                   int             `orm:"pk;not null;auto;unique"`
+	AnnoImmatricolazione int             `orm:"type(date)"`
+	NLibretto            string          `orm:"null"`
+	NTelaio              string          `orm:"null"`
+	Marca                string          `orm:"size(7)"`
+	Modello              string          `orm:"size(40)"`
+	NorEuro              int             `orm:"null"`
+	Kw                   int             `orm:"null"`
+	Cilindrata           int             `orm:"null"`
+	ConsumoTeorico       int             `orm:"null"`
+	KmAnno               int             `orm:"null"`
+	CostoKm              int             `orm:"null;digits(12);decimals(4)"`
+	Pneumatici           string          `orm:"null;size(20)"`
+	VeicoliDG            *VeicoliDG      `orm:"reverse(one)"`
+	Allegati             []*Allegati     `orm:"rel(m2m)"`
+	Carburante           *Carburante     `orm:"rel(fk)"`
+	ContrAcquisti        *ContrAcquisti  `orm:"rel(fk);null"`
+	ContrLeasing         []*ContrLeasing `orm:"rel(m2m);null"`
+	ContrNoleggi         []*ContrNoleggi `orm:"rel(m2m);null"`
 }
 
 //Carburante contiene i tipi di carburante
@@ -118,7 +118,7 @@ type Allegati struct {
 type ContrAcquisti struct {
 	ID                int          `orm:"pk;not null;auto;unique"`
 	NContratto        string       `orm:"unique;not null;size(20)"`
-	DataAcq           time.Time    `orm:"null;type(date)"`
+	DataCont          time.Time    `orm:"null;type(date)"`
 	Importo           float64      `orm:"null;digits(12);decimals(4)"`
 	AmmortamentoAnnuo int          `orm:"null"`
 	FineGaranzia      time.Time    `orm:"null;auto_now_add;type(date)"`
@@ -126,7 +126,7 @@ type ContrAcquisti struct {
 	KmInizioGest      int          `orm:"null"`
 	Note              string       `orm:"null;size(100)"`
 	Allegati          []*Allegati  `orm:"rel(m2m)"`
-	Fornitori         *Fornitori   `orm:"rel(fk)"`
+	Fornitori         *Fornitori   `orm:"null;rel(fk)"`
 	VeicoliDT         []*VeicoliDT `orm:"reverse(many)"`
 }
 
@@ -134,7 +134,7 @@ type ContrAcquisti struct {
 type ContrLeasing struct {
 	ID           int          `orm:"pk;not null;auto;unique"`
 	NContratto   string       `orm:"unique;not null;size(20)"`
-	DataCont     time.Time    `orm:"auto_now_add;type(date)"`
+	DataCont     time.Time    `orm:"null;type(date)"`
 	PrimaRata    float64      `orm:"null;digits(12);decimals(4)"`
 	RataSucc     float64      `orm:"null;digits(12);decimals(4)"`
 	NRate        int          `orm:"null"`
@@ -147,33 +147,33 @@ type ContrLeasing struct {
 	KmFineGest   int          `orm:"null"`
 	Note         string       `orm:"null;size(100)"`
 	Allegati     []*Allegati  `orm:"rel(m2m)"`
-	Fornitori    *Fornitori   `orm:"rel(fk)"`
+	Fornitori    *Fornitori   `orm:"null;rel(fk)"`
 	VeicoliDT    []*VeicoliDT `orm:"reverse(many)"`
 }
 
 //ContrNoleggi contiene i Contratti di noleggio
 type ContrNoleggi struct {
-	ID                   int          `orm:"pk;not null;auto;unique"`
-	NContratto           string       `orm:"unique;not null;size(20)"`
-	DataCont             time.Time    `orm:"null;type(date)"`
-	DataInizio           time.Time    `orm:"null;type(date)"`
-	DataFine             time.Time    `orm:"null;type(date)"`
-	Riparamentrizzazione int          `orm:"null"`
-	NRate                int          `orm:"null"`
-	CanoneBase           float64      `orm:"null;digits(12);decimals(4)"`
-	CanoneServizi        float64      `orm:"null;digits(12);decimals(4)"`
-	CanoneAltro          float64      `orm:"null;digits(12);decimals(4)"`
-	CanoneTot            float64      `orm:"null;digits(12);decimals(4)"`
-	KmContrattuali       int          `orm:"null"`
-	AddebitoKmExtra      int          `orm:"null"`
-	ImportoKm            float64      `orm:"null;digits(12);decimals(4)"`
-	ImportoTot           float64      `orm:"null;digits(12);decimals(4)"`
-	KmInizioGest         int          `orm:"null"`
-	KmFineGest           int          `orm:"null"`
-	Note                 string       `orm:"null;size(100)"`
-	Allegati             []*Allegati  `orm:"rel(m2m)"`
-	Fornitori            *Fornitori   `orm:"rel(fk)"`
-	VeicoliDT            []*VeicoliDT `orm:"reverse(many)"`
+	ID                  int          `orm:"pk;not null;auto;unique"`
+	NContratto          string       `orm:"unique;not null;size(20)"`
+	DataCont            time.Time    `orm:"null;type(date)"`
+	DataInizio          time.Time    `orm:"null;type(date)"`
+	DataFine            time.Time    `orm:"null;type(date)"`
+	Riparametrizzazione int          `orm:"null"`
+	NRate               int          `orm:"null"`
+	CanoneBase          float64      `orm:"null;digits(12);decimals(4)"`
+	CanoneServizi       float64      `orm:"null;digits(12);decimals(4)"`
+	CanoneAltro         float64      `orm:"null;digits(12);decimals(4)"`
+	CanoneTot           float64      `orm:"null;digits(12);decimals(4)"`
+	KmContrattuali      int          `orm:"null"`
+	AddebitoKmExtra     int          `orm:"null"`
+	ImportoKm           float64      `orm:"null;digits(12);decimals(4)"`
+	ImportoTot          float64      `orm:"null;digits(12);decimals(4)"`
+	KmInizioGest        int          `orm:"null"`
+	KmFineGest          int          `orm:"null"`
+	Note                string       `orm:"null;size(100)"`
+	Allegati            []*Allegati  `orm:"rel(m2m)"`
+	Fornitori           *Fornitori   `orm:"null;rel(fk)"`
+	VeicoliDT           []*VeicoliDT `orm:"reverse(many)"`
 }
 
 //Fornitori contiene l'elenco fornitori
@@ -181,10 +181,10 @@ type Fornitori struct {
 	ID            int              `orm:"pk;not null;auto;unique"`
 	Descrizione   string           `orm:"size(100)"`
 	PI            string           `orm:"null"`
-	ContrAcquisti []*ContrAcquisti `orm:"reverse(many)"`
-	ContrLeasing  []*ContrLeasing  `orm:"reverse(many)"`
-	ContrNoleggi  []*ContrNoleggi  `orm:"reverse(many)"`
-	Rifornimenti  []*Rifornimenti  `orm:"reverse(many)"`
+	ContrAcquisti []*ContrAcquisti `orm:"null;reverse(many)"`
+	ContrLeasing  []*ContrLeasing  `orm:"null;reverse(many)"`
+	ContrNoleggi  []*ContrNoleggi  `orm:"null;reverse(many)"`
+	Rifornimenti  []*Rifornimenti  `orm:"null;reverse(many)"`
 }
 
 //Incidenti contiene l'elenco degli incidenti
@@ -307,10 +307,17 @@ type Spese struct {
 	VeicoliDG        []*VeicoliDG `orm:"rel(m2m)"`
 }
 
+type DateTest struct {
+	ID    int       `orm:"pk;not null;auto;unique"`
+	Data  time.Time `orm:"null;type(date)"`
+	Data2 time.Time `orm:"null;type(datetime)"`
+	Data3 time.Time `orm:"null;type(strftime)"`
+}
+
 //*************FINE DB AUTOMEZZI****************
 func init() {
 	//Login & App Manager DB
 	//Automezzi DB
 	orm.RegisterModel(new(VeicoliDG), new(VeicoliDT), new(Carburante), new(TipiVeicolo), new(Settori), new(Condizioni), new(Impieghi), new(Conducenti), new(Allegati), new(ContrAcquisti), new(ContrLeasing), new(ContrNoleggi), new(Fornitori), new(Incidenti), new(Responsabilita))
-	orm.RegisterModel(new(ContropartiIncidenti), new(Movimenti), new(Multe), new(TipiInfrazione), new(Rifornimenti), new(TipiSpesa), new(Spese))
+	orm.RegisterModel(new(ContropartiIncidenti), new(Movimenti), new(Multe), new(TipiInfrazione), new(Rifornimenti), new(TipiSpesa), new(Spese), new(DateTest))
 }

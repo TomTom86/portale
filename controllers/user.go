@@ -139,7 +139,7 @@ func (c *MainController) Login() {
 		} else {
 			m["admin"] = 0
 		}
-		//m["automezzi"] = user.AuthApp.Automezzi
+		m["automezzi"] = user.AuthApp.Automezzi
 		c.SetSession("portale", m)
 		c.Redirect("/"+back, 302)
 

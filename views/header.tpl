@@ -86,6 +86,25 @@
                                     <div id="dropdown-lvl1" class="panel-collapse collapse">
                                         <div class="panel-body">
                                             <ul class="nav navbar-nav">
+                                                {{if .Admin}}
+                                                    <li><a href="http://{{.domainname}}/automezzi/id!0!id__gte,0"><span class="glyphicon glyphicon-cog"></span> Gestione Veicoli</a></li>
+                                                    <li><a href="http://{{.domainname}}/automezzi/view/fornitori/id!0!id__gte,0"><span class="glyphicon glyphicon-cog"></span> Gestione Fornitori</a></li>
+                                                    <li class="panel panel-default" id="dropdown">
+                                                    <a data-toggle="collapse" href="#dropdown-lvl2">
+                                                        <span class="glyphicon glyphicon-cog"></span> Gestione Contratti <span class="caret"></span>
+                                                    </a>
+                                                    <div id="dropdown-lvl2" class="panel-collapse collapse">
+                                                        <div class="panel-body">
+                                                            <ul class="nav navbar-nav">
+                                                                <li><a href="http://{{.domainname}}/automezzi/view/contrattiacq/id!0!id__gte,0"><span class="glyphicon glyphicon-cog"></span> Contratti Acquisto</a></li>
+                                                                <li><a href="http://{{.domainname}}/automezzi/view/contrattilea/id!0!id__gte,0"><span class="glyphicon glyphicon-cog"></span> Contratti Leasing</a></li>
+                                                                <li><a href="http://{{.domainname}}/automezzi/view/contrattinol/id!0!id__gte,0"><span class="glyphicon glyphicon-cog"></span> Contratti Noleggio</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                    
+                                                {{end}}
                                                 <li><a href="#">Veicoli</a></li>
                                                 <li><a href="#">Movimenti</a></li>
                                                 <li><a href="#">Rifornimenti</a></li>

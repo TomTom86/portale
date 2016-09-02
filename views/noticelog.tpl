@@ -6,7 +6,7 @@
             </div>
             <div class="panel-body">
                     &nbsp;
-                    {{.flash.notice}}
+                    <h2>{{.flash.notice}}</h2>
                     &nbsp
                     &nbsp
             </div>
