@@ -41,72 +41,72 @@
                             
                     <!-- NUMERO CONTRATTO --> 
                     <div class="form-group">                
-                        <label class="col-md-4 control-label" for="nome">Numero Contratto</label>                          
+                        <label class="col-md-4 control-label" for="ncontratto">Numero Contratto</label>                          
                         <div class="col-md-4">
                         <input id="ncontratto" name="ncontratto" type="text" value="{{.NContratto}}" class="form-control input-md"/>
                         </div> 
                     </div> 
                     <!-- DATA ACQUISTO --> 
                     <div class="form-group">                
-                        <label class="col-md-4 control-label" for="nome">Data Acquisto</label>                          
+                        <label class="col-md-4 control-label" for="datacont">Data Acquisto</label>                          
                         <div class="col-md-4">
                             <input id="datacont" name="datacont" type=date min=2000-01-01 datetime="2000-01-01 00:00:01" class="form-control input-md" value="{{.DataCont}}"/>
                         </div> 
                     </div> 
                     <!-- IMPORTO --> 
                     <div class="form-group">                
-                        <label class="col-md-4 control-label" for="nome">Importo</label>                          
+                        <label class="col-md-4 control-label" for="importo">Importo</label>                          
                         <div class="col-md-4">
                         <input id="importo" name="importo" type="text" value="{{.Importo}}" class="form-control input-md"/>
                         </div> 
                     </div> 
                     <!-- AMMORTAMENTO ANNUO --> 
                     <div class="form-group">                
-                        <label class="col-md-4 control-label" for="nome">Ammortamento Annuo</label>                          
+                        <label class="col-md-4 control-label" for="ammortannuo">Ammortamento Annuo</label>                          
                         <div class="col-md-4">
                         <input id="ammortannuo" name="ammortannuo" type="text" value="{{.AmmortamentoAnnuo}}" class="form-control input-md"/>
                         </div> 
                     </div> 
                     <!-- FINE GARANZIA --> 
                     <div class="form-group">                
-                        <label class="col-md-4 control-label" for="nome">Fine Garanzia</label>                          
+                        <label class="col-md-4 control-label" for="finegaranzia">Fine Garanzia</label>                          
                         <div class="col-md-4">
                         <input id="finegaranzia" name="finegaranzia" type=date min=2000-01-01 datetime="2000-01-01 00:00:01" class="form-control input-md" value="{{.FineGaranzia}}" />
                         </div> 
                     </div> 
                     <!-- KM ACQUISTO --> 
                     <div class="form-group">                
-                        <label class="col-md-4 control-label" for="nome">KM Acquisti</label>                          
+                        <label class="col-md-4 control-label" for="kmacq">KM Acquisti</label>                          
                         <div class="col-md-4">
                         <input id="kmacq" name="kmacq" type="text" value="{{.KmAcquisto}}" class="form-control input-md"/>
                         </div> 
                     </div> 
                     <!-- KM INIZIO GESTIONE --> 
                     <div class="form-group">                
-                        <label class="col-md-4 control-label" for="nome">KM inizio Gestione</label>                          
+                        <label class="col-md-4 control-label" for="kmingest">KM inizio Gestione</label>                          
                         <div class="col-md-4">
                         <input id="kmingest" name="kmingest" type="text" value="{{.KmInizioGest}}" class="form-control input-md"/>
                         </div> 
                     </div> 
                     <!-- NOTE --> 
                     <div class="form-group">                
-                        <label class="col-md-4 control-label" for="nome">Note</label>                          
+                        <label class="col-md-4 control-label" for="note">Note</label>                          
                         <div class="col-md-4">
                         <input id="note" name="note" type="text" value="{{.Note}}" class="form-control input-md"/>
                         </div> 
                     </div> 
                     <!-- FORNITORI --> 
                     <div class="form-group">                
-                        <label class="col-md-4 control-label" for="nome">Fornitori</label>                          
+                        <label class="col-md-4 control-label" for="fornitore">Fornitori</label>                          
                         <div class="col-md-4">
-                        <input id="fornitore" name="fornitore" type="text" value="{{.Fornitori}}" class="form-control input-md"/>
+                        <input id="fornitore" name="fornitore" type="text" value="{{.Fornitori}}" class="form-control input-md"/> 
                         </div> 
                     </div>        
                     <!-- PI FORNITORI --> 
                     <div class="form-group">                
-                        <label class="col-md-4 control-label" for="nome">Partita Iva Fornitore</label>                          
+                        <label class="col-md-4 control-label" for="pifornitore">Partita Iva Fornitore</label>                          
                         <div class="col-md-4">
-                        <input id="pifornitore" name="pifornitore" type="text" value="{{.PIFornitori}}" class="form-control input-md" disabled/>
+                        <input id="pifornitore" name="pifornitore" type="text" value="{{.PIFornitori}}" class="form-control input-md" disabled/> 
                         </div> 
                     </div>                                                                                                                                       
                     

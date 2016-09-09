@@ -48,6 +48,10 @@ func init() {
 	beego.Router("/automezzi/edit/contrattonol/:parms", &automezzi.AutomezziController{}, "get,post:EditNoleggio")
 	beego.Router("/automezzi/add/noleggio/:parms", &automezzi.AutomezziController{}, "get,post:AddNoleggio")
 
+	beego.Router("/automezzi/view/automezzi/:parms", &automezzi.AutomezziController{}, "get,post:ViewAutomezzi")
+	beego.Router("/automezzi/edit/automezzo/:parms", &automezzi.AutomezziController{}, "get,post:EditAutomezzo")
+	//beego.Router("/automezzi/add/automezzo/:parms", &automezzi.AutomezziController{}, "get,post:AddAutomezzo")
+
 	beego.Router("/automezzi/add/automezzo/", &automezzi.AutomezziController{}, "get,post:AddAutomezzo")
 	beego.Router("/automezzi/add/automezzo2/", &automezzi.AutomezziController{}, "get,post:AddAutomezzo2")
 	beego.Router("/automezzi/add/conducente/", &automezzi.AutomezziController{}, "get,post:AddConducente")

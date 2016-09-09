@@ -34,12 +34,7 @@
             </div>      
             {{end}}
             &nbsp;
-            {{end}} 
-            <div class="form-group  col-lg-2">
-                <div class="btn-toolbar pull-left">
-                    <button class="btn btn-primary" onclick="location.href='http://{{.domainname}}/automezzi/add/contrattinol'">+ Nuovo Contratto Noleggio</button>
-                </div> 
-            </div>            
+            {{end}}            
             <form class="form-horizontal" method="POST">
                 {{.xsrfdata}}
                       

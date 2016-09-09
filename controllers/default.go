@@ -6,6 +6,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
+//MainController è il maincontroller del portale
 type MainController struct {
 	beego.Controller
 }
@@ -71,7 +72,6 @@ func (c *MainController) Get() {
 }
 
 //Notice show flash message
-
 func (c *MainController) Notice() {
 	sess := c.GetSession("portale")
 	if sess != nil {

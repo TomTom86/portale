@@ -63,7 +63,8 @@ $(document).ready(function(){
                 $tbody.find('tr').show();
             }
         });  
-        } else if (document.getElementById("ncontrsearch") && document.getElementById("datasearch") && document.getElementById("fornsearch")){
+        } else {
+            if (document.getElementById("ncontrsearch") && document.getElementById("datasearch") && document.getElementById("fornsearch")){
             document.getElementById("ncontrsearch").style.visibility = "hidden";
             document.getElementById("datasearch").style.visibility = "hidden";
             document.getElementById("fornsearch").style.visibility = "hidden";
@@ -85,6 +86,29 @@ $(document).ready(function(){
                     $tbody.find('tr').show();
                 }
             });  
+            } else if (document.getElementById("targasearch") && document.getElementById("marcasearch") && document.getElementById("modellosearch")){
+                document.getElementById("targasearch").style.visibility = "hidden";
+                document.getElementById("marcasearch").style.visibility = "hidden";
+                document.getElementById("modellosearch").style.visibility = "hidden";
+                $('.filterable .btn-filter').click(function(){
+                    var $panel = $(this).parents('.filterable'),
+                    $filters = $panel.find('.filters input'),
+                    $tbody = $panel.find('.table tbody');
+                    if ($filters.prop('disabled') == true) {
+                        $filters.prop('disabled', false);
+                        document.getElementById("targasearch").style.visibility = "visible";
+                        document.getElementById("marcasearch").style.visibility = "visible";
+                        document.getElementById("modellosearch").style.visibility = "visible";
+                        $filters.first().focus();
+                    } else {
+                        $filters.val('').prop('disabled', true);
+                        document.getElementById("targasearch").style.visibility = "hidden";
+                        document.getElementById("marcasearch").style.visibility = "hidden";
+                        document.getElementById("modellosearch").style.visibility = "hidden";
+                        $tbody.find('tr').show();
+                    }
+                });  
+            }
         }
     }
 

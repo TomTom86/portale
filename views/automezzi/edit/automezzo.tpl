@@ -1,7 +1,7 @@
 <div class="col-md-10 content">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3>Aggiungi Veicolo</h3>
+            <h3>Modifica Veicolo</h3>
         </div>
         <div class="panel-body">
             {{if .flash.error}}
@@ -58,7 +58,7 @@
                         <label class="col-md-4 control-label" for="dataFineFlotta">Data uscita da flotta</label>
                         <div class="col-md-4">
                         {{if .Errors.AutomezzoDG.DataFineFlotta}}  {{.Errors.AutomezzoDG.DataFineFlotta}}  {{end}}
-                        <input id="dataFineFlotta" name="dataFineFlotta" type=date min=2000-01-01 datetime="2000-01-01 00:00:01" value="{{.AutomezzoDG.DataFineFlotta}}" class="form-control input-md"/>
+                        <input id="dataFineFlotta" name="dataFineFlotta" type=date min=2000-01-01 datetime="2000-01-01 00:00:01" value="{{.AutomezzoDG.DataFineFlotta}}" size="10" class="form-control input-md"/>
                         </div>
                     </div>   
                     <!-- TIPOVEICOLO --> 

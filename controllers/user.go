@@ -1,20 +1,19 @@
 package controllers
 
 import (
-	"portale/models"
-	pk "portale/utilities/pbkdf2"
 	"encoding/hex"
 	"fmt"
+	"html/template"
+	"portale/models"
+	pk "portale/utilities/pbkdf2"
 	"strings"
 	"time"
-    "html/template"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
 	"github.com/go-gomail/gomail"
 	"github.com/twinj/uuid"
-
 )
 
 var (
@@ -25,10 +24,9 @@ var (
 	appcfgMailHostPort, err        = beego.AppConfig.Int("appcfgMailHostPort")
 )
 
-
+//Login func manage User's login
 //TODO la gestione dei permessi utente non è molto sicura, forse è meglio dividere i permessi in una tabella a parte
 // BUG** LE MODIFICHE EFFETTUATE ALLE APPLICAZIONI E QUINDI AL MENU SONO VALIDE SOLO DOPO AVER RILOGGATO
-//Login func manage User's login
 //per migliorare sicurezza dare sempre lo stesso errore "password sbagliata o account inesistente"
 //SOSTITUIRE USO PDBKDF2 CON BCRYPTO
 func (c *MainController) Login() {
@@ -40,8 +38,8 @@ func (c *MainController) Login() {
 	}
 	back := strings.Replace(c.Ctx.Input.Param(":back"), ">", "/", -1) // allow for deeper URL such as l1/l2/l3 represented by l1>l2>l3
 	fmt.Println("back is", back)
-    
-    c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	if c.Ctx.Input.Method() == "POST" {
 
 		flash := beego.NewFlash()
@@ -178,7 +176,7 @@ type userForm struct {
 // BUG: se l'account esiste già crea comunque la tabella app
 func (c *MainController) Register() {
 	c.activeContent("user/register")
-     c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	if c.Ctx.Input.Method() == "POST" {
 		flash := beego.NewFlash()
 		u := userForm{}
@@ -257,7 +255,7 @@ func (c *MainController) Register() {
 		if !sendComunication(m) {
 			flash.Error("Impossibile inviare email di verifica")
 			flash.Store(&c.Controller)
-            c.Redirect("/notice", 302)
+			c.Redirect("/notice", 302)
 			return
 		}
 		flash.Notice("L'account e' stato creato. Ti abbiamo inviato una e-mail per verificare l'account.")
@@ -318,7 +316,7 @@ func (c *MainController) Verify() {
 //DOTO: per sicurezza dal messaggio non si dovrebbe capire se la mail esiste o meno
 func (c *MainController) Forgot() {
 	c.activeContent("user/forgot")
-    c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	if c.Ctx.Input.Method() == "POST" {
 		email := c.GetString("email")
 		valid := validation.Validation{}
@@ -405,9 +403,9 @@ func (c *MainController) Profile() {
 			c.Data["Last"] = user.Last
 			c.Data["Email"] = user.Email
 		}(c, &user)
-        
-            //XSRF attack defense
-        c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+
+		//XSRF attack defense
+		c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 		if c.Ctx.Input.Method() == "POST" {
 			first := c.GetString("first")
 			last := c.GetString("last")
@@ -496,8 +494,8 @@ func (c *MainController) Remove() {
 	}
 	m := sess.(map[string]interface{})
 
-        //XSRF attack defense
-    c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	//XSRF attack defense
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	if c.Ctx.Input.Method() == "POST" {
 		current := c.GetString("current")
 		valid := validation.Validation{}
@@ -561,7 +559,7 @@ func (c *MainController) Remove() {
 //Reset func reset password if user forgot login credentials
 func (c *MainController) Reset() {
 	c.activeContent("user/reset")
-    c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML()) 
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	flash := beego.NewFlash()
 
 	u := c.Ctx.Input.Param(":uuid")
@@ -574,7 +572,7 @@ func (c *MainController) Reset() {
 		flash.Store(&c.Controller)
 		c.Redirect("/notice", 302)
 	}
-    
+
 	if c.Ctx.Input.Method() == "POST" {
 		password := c.GetString("password")
 		password2 := c.GetString("password2")

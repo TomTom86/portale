@@ -148,7 +148,7 @@
                     <!-- footer --> 
                     <div class="col-md-12 form-group">
                         <a class="btn btn-primary pull-left" href="http://{{.domainname}}/automezzi/view/fornitori/id!0!id__gte,0">Indietro</a>
-                        <button class="btn btn-primary pull-right" type="submit" class="pull-right" value="Continua" />Inserisci</button>
+                        <button class="btn btn-primary pull-right" type="submit" value="Continua" />Inserisci</button>
                         
                                   
                     </div>                              

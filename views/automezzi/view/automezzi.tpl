@@ -2,7 +2,7 @@
  <div class="col-md-10 content">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3>Gestione Contratti Leasing</h3>
+            <h3>Gestione Automezzi</h3>
         </div>
         <div class="panel-body">           
             {{if .flash.error}}
@@ -34,15 +34,20 @@
             </div>      
             {{end}}
             &nbsp;
-            {{end}}            
+            {{end}} 
+            <div class="form-group  col-lg-2">
+                <div class="btn-toolbar pull-left">
+                    <button class="btn btn-primary" onclick="location.href='http://{{.domainname}}/automezzi/add/automezzo'">+ Nuovo Automezzo</button>
+                </div> 
+            </div>            
             <form class="form-horizontal" method="POST">
                 {{.xsrfdata}}
                       
                 <div class="form-group col-lg-6" >
                     <select name="comparefield">
-                        <option value="NContratto" selected="selected">NContratto</option>
-                        <option value="data_cont">Data Contratto</option>
-                        <option value="Fornitore">Fornitore</option>
+                        <option value="Descrizione" selected="selected">Targa</option>
+                        <option value="Modello">Marca</option>
+                        <option value="Modello">Modello</option>                        
                     </select>
 
                     <select name="compareop">
@@ -66,23 +71,24 @@
 
             <div class="filterable">
                     <table class="table">
-                      <thead>
+                     <thead>
                         <tr class="filters">
-                            <th><input type="text" id="ncontrsearch" class="form-control" placeholder="NContratto" disabled ></th>
-                            <th><input type="text" id="datasearch" class="form-control" placeholder="Data Contratto" disabled hidden></th>
-                            <th><input type="text" id="fornsearch" class="form-control" placeholder="Fornitore" disabled hidden></th>
+                            <th><input type="text" id="targasearch" class="form-control" placeholder="Targa" disabled ></th>
+                            <th><input type="text" id="marcasearch" class="form-control" placeholder="Marca" disabled hidden></th>
+                            <th><input type="text" id="modellosearch" class="form-control" placeholder="Modello" disabled hidden></th>
+                            <th></th>
                             <th>
-                                <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                                <button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span> Filter</button>
                             </th>
-                            </tr>
+                        </tr>
 
-                    </thead>    
+                    </thead>     
                     <thead>
                         <tr class="filters">
-                            <th><a href="http://{{.domainname}}/automezzi/view/contrattilea/{{if eq .order "ncontratto"}}-{{end}}ncontratto!{{.offset}}!{{.query}}">Numero Contratto</a></th>
-                            <th><a href="http://{{.domainname}}/automezzi/view/contrattilea/{{if eq .order "data_cont"}}-{{end}}data_cont!{{.offset}}!{{.query}}">Data Contratto</a></th>
-                            <th><a href="#">Fornitore</a></th>
-                            <th><a href="#">Modifica</a></th>                         
+                            <th><a href="http://{{.domainname}}/automezzi/view/automezzi/{{if eq .order "targa"}}-{{end}}descrizione!{{.offset}}!{{.query}}">Targa</a></th>
+                            <th><a href="http://{{.domainname}}/automezzi/view/automezzi/{{if eq .order "marca"}}-{{end}}pi!{{.offset}}!{{.query}}">Marca</a></th>
+                            <th><a href="http://{{.domainname}}/automezzi/view/automezzi/{{if eq .order "modello"}}-{{end}}pi!{{.offset}}!{{.query}}">Modello</a></th>
+                            <th><a href="#">Modifica</a></th>                        
                         </tr>
                     </thead>
                     <tbody>
@@ -99,20 +105,20 @@
                                 <nav>
                                     <ul class="pager">
                                         <li>
-                                            <a href="http://{{.domainname}}/automezzi/view/contrattilea/{{.order}}!0!{{.query}}">&lt;&lt; Inizio</a>
+                                            <a href="http://{{.domainname}}/automezzi/view/fornitori/{{.order}}!0!{{.query}}">&lt;&lt; Inizio</a>
                                         </li>
                                         {{if .showprev}}
                                             <li>
-                                                <a href="http://{{.domainname}}/automezzi/view/contrattilea/{{.order}}!{{.prev}}!{{.query}}">&lt; Precendente</a>
+                                                <a href="http://{{.domainname}}/automezzi/view/fornitori/{{.order}}!{{.prev}}!{{.query}}">&lt; Precendente</a>
                                             </li>
                                         {{end}}
                                         {{if .next}}
                                             <li>
-                                                <a href="http://{{.domainname}}/automezzi/view/contrattilea/{{.order}}!{{.next}}!{{.query}}">Successivo &gt;</a>
+                                                <a href="http://{{.domainname}}/automezzi/view/fornitori/{{.order}}!{{.next}}!{{.query}}">Successivo &gt;</a>
                                             </li>
                                         {{end}}
                                         <li>
-                                            <a href="http://{{.domainname}}/automezzi/view/contrattilea/{{.order}}!{{.end}}!{{.query}}">Fine &gt;&gt;</a>
+                                            <a href="http://{{.domainname}}/automezzi/view/fornitori/{{.order}}!{{.end}}!{{.query}}">Fine &gt;&gt;</a>
                                         </li>
                                     </ul>
                                 </nav>

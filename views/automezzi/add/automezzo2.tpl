@@ -58,7 +58,7 @@
                                         <label class="control-label" for="dataInFlotta">Data entrata in flotta</label>                     
                                         <div>
                                         {{if .Errors.AutomezzoDG.DataInFlotta}}  {{.Errors.AutomezzoDG.DataInFlotta}}  {{end}}
-                                        <input id="dataInFlotta" name="dataInFlotta" type="text" value="{{.AutomezzoDG.DataInFlotta}}" size="10" class="form-control input-md" placeholder="GG/MM/AAAA"/>
+                                        <input id="dataInFlotta" name="dataInFlotta" type=date min=2000-01-01 datetime="2000-01-01 00:00:01" value="{{.AutomezzoDG.DataInFlotta}}" size="10" class="form-control input-md" />
                                         </div> 
                                     </div>
 
@@ -67,7 +67,7 @@
                                         <label class="control-label" for="dataFineFlotta">Data uscita da flotta</label>
                                         <div>
                                         {{if .Errors.AutomezzoDG.DataFineFlotta}}  {{.Errors.AutomezzoDG.DataFineFlotta}}  {{end}}
-                                        <input id="dataFineFlotta" name="dataFineFlotta" type="text" value="{{.AutomezzoDG.DataFineFlotta}}" size="10" class="form-control input-md" placeholder="GG/MM/AAAA"/>
+                                        <input id="dataFineFlotta" name="dataFineFlotta" type=date min=2000-01-01 datetime="2000-01-01 00:00:01" value="{{.AutomezzoDG.DataFineFlotta}}" size="10" class="form-control input-md" placeholder="GG/MM/AAAA"/>
                                         </div>
                                     </div>   
                                     <!-- TIPOVEICOLO --> 

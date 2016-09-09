@@ -87,7 +87,8 @@
                                         <div class="panel-body">
                                             <ul class="nav navbar-nav">
                                                 {{if .Admin}}
-                                                    <li><a href="http://{{.domainname}}/automezzi/id!0!id__gte,0"><span class="glyphicon glyphicon-cog"></span> Gestione Veicoli</a></li>
+                                                    <li><a href="http://{{.domainname}}/automezzi/add/conducente"><span class="glyphicon glyphicon-cog"></span> Aggiungi Conducenti</a></li>
+                                                    <li><a href="http://{{.domainname}}/automezzi/view/automezzi/id!0!id__gte,0"><span class="glyphicon glyphicon-cog"></span> Gestione Veicoli</a></li>
                                                     <li><a href="http://{{.domainname}}/automezzi/view/fornitori/id!0!id__gte,0"><span class="glyphicon glyphicon-cog"></span> Gestione Fornitori</a></li>
                                                     <li class="panel panel-default" id="dropdown">
                                                     <a data-toggle="collapse" href="#dropdown-lvl2">

@@ -77,9 +77,9 @@
                             <th><input type="text" id="pisearch" class="form-control" placeholder="Partita Iva" disabled hidden></th>
                             <th></th>
                             <th>
-                                <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                                <button class="btn btn-default btn-xs btn-filter pull-right"><span class="glyphicon glyphicon-filter"></span> Filter</button>
                             </th>
-                            </tr>
+                        </tr>
 
                     </thead>     
                     <thead>

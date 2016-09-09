@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"html/template"
-	_ "portale/models"
+	_ "portale/models" //importo sempre models per evitare errori
 	"portale/modules/automezzi/models"
 	"reflect"
 	"strconv"
@@ -13,13 +13,14 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/validation"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3" // importo sempre squid per evitare errori
 )
 
 var (
-	appcfgdomainname string = beego.AppConfig.String("appcfgdomainname")
+	appcfgdomainname = beego.AppConfig.String("appcfgdomainname")
 )
 
+//AutomezziController è il controller beego
 type AutomezziController struct {
 	beego.Controller
 }
@@ -53,57 +54,57 @@ type automezzo struct {
 
 //VALUTARE QUALI SONO REALMETNE NECESSARI RISPETTO AI DB
 type contrattoAcq struct {
-	NContratto        string    `form:"ncontratto" valid:"Required"`
-	DataCont           string `form:"datacont" valid:"Required"`
-	Importo           float64   `form:"importo" valid:"Required"`
-	AmmortamentoAnnuo int       `form:"ammortannuo" valid:"Required"`
-	FineGaranzia      string `form:"finegaranzia" valid:"Required"`
-	KmAcquisto        int       `form:"kmacq" valid:"Required"`
-	KmInizioGest      int       `form:"kmingest" valid:"Required"`
-	Note              string    `form:"note" valid:"MaxSize(100)"`
-	Fornitori         string    `form:"fornitore"`
-	PIFornitori       string    `form:"pifornitore"`
+	NContratto        string  `form:"ncontratto" valid:"Required"`
+	DataCont          string  `form:"datacont" valid:"Required"`
+	Importo           float64 `form:"importo" valid:"Required"`
+	AmmortamentoAnnuo int     `form:"ammortannuo" valid:"Required"`
+	FineGaranzia      string  `form:"finegaranzia" valid:"Required"`
+	KmAcquisto        int     `form:"kmacq" valid:"Required"`
+	KmInizioGest      int     `form:"kmingest" valid:"Required"`
+	Note              string  `form:"note" valid:"MaxSize(100)"`
+	Fornitori         string  `form:"fornitore"`
+	PIFornitori       string  `form:"pifornitore"`
 }
 
-type contrattoLea struct {        
-	NContratto   string    `form:"ncontratto" valid:"Required"`
-	DataCont     string    `form:"datacont" valid:"Required"`
-	PrimaRata    float64    `form:"prata" valid:"Required"`
-	RataSucc     float64    `form:"ratesucc" valid:"Required"`
-	NRate        int    `form:"nrate" valid:"Required"`
-	Riscatto     float64    `form:"riscatto" valid:"Required"`
-	DataRiscatto string    `form:"datariscatto" valid:"Required"`
-	ImportoTot   float64    `form:"importotot" valid:"Required"`
-	FineCont     string    `form:"datafinecontr" valid:"Required"`
-	FineGaranzia string    `form:"datafinegaranzia" valid:"Required"`
-	KmInizioGest int    `form:"kmingest" valid:"Required"`
-	KmFineGest   int    `form:"kmfinegest" valid:"Required"`
-	Note         string    `form:"note" valid:"MaxSize(100)"`
-	Fornitori         string    `form:"fornitore"`
-	PIFornitori       string    `form:"pifornitore"`
+type contrattoLea struct {
+	NContratto   string  `form:"ncontratto" valid:"Required"`
+	DataCont     string  `form:"datacont" valid:"Required"`
+	PrimaRata    float64 `form:"prata" valid:"Required"`
+	RataSucc     float64 `form:"ratesucc" valid:"Required"`
+	NRate        int     `form:"nrate" valid:"Required"`
+	Riscatto     float64 `form:"riscatto" valid:"Required"`
+	DataRiscatto string  `form:"datariscatto" valid:"Required"`
+	ImportoTot   float64 `form:"importotot" valid:"Required"`
+	FineCont     string  `form:"datafinecontr" valid:"Required"`
+	FineGaranzia string  `form:"datafinegaranzia" valid:"Required"`
+	KmInizioGest int     `form:"kmingest" valid:"Required"`
+	KmFineGest   int     `form:"kmfinegest" valid:"Required"`
+	Note         string  `form:"note" valid:"MaxSize(100)"`
+	Fornitori    string  `form:"fornitore"`
+	PIFornitori  string  `form:"pifornitore"`
 }
 
 type contrattoNol struct {
-	ID                   int         
-	NContratto           string    `form:"ncontratto" valid:"Required"`
-	DataCont             string    `form:"datacont" valid:"Required"`
-	DataInizio           string    `form:"datainiziocontr" valid:"Required"`
-	DataFine             string    `form:"datafinecontratto" valid:"Required"`
-	Riparametrizzazione int    `form:"riparametrizzazione" valid:"Required"`
-	NRate                int    `form:"nrate" valid:"Required"`
-	CanoneBase           float64    `form:"canonebase" valid:"Required"`
-	CanoneServizi        float64    `form:"canoneservizi" valid:"Required"`
-	CanoneAltro          float64    `form:"canonealtro" valid:"Required"`
-	CanoneTot            float64    `form:"canonetotale" valid:"Required"`
-	KmContrattuali       int    `form:"kmcontrattuali" valid:"Required"`
-	AddebitoKmExtra      int    `form:"addebitokmextra" valid:"Required"`
-	ImportoKm            float64    `form:"importokm" valid:"Required"`
-	ImportoTot           float64    `form:"imptotale" valid:"Required"`
-	KmInizioGest         int    `form:"kmingest" valid:"Required"`
-	KmFineGest           int    `form:"kmfinegest" valid:"Required"`
-	Note                 string    `form:"note" valid:"MaxSize(100)"`
-	Fornitori         string    `form:"fornitore" `
-	PIFornitori       string    `form:"pifornitore" `
+	ID                  int
+	NContratto          string  `form:"ncontratto" valid:"Required"`
+	DataCont            string  `form:"datacont" valid:"Required"`
+	DataInizio          string  `form:"datainiziocontr" valid:"Required"`
+	DataFine            string  `form:"datafinecontratto" valid:"Required"`
+	Riparametrizzazione int     `form:"riparametrizzazione" valid:"Required"`
+	NRate               int     `form:"nrate" valid:"Required"`
+	CanoneBase          float64 `form:"canonebase" valid:"Required"`
+	CanoneServizi       float64 `form:"canoneservizi" valid:"Required"`
+	CanoneAltro         float64 `form:"canonealtro" valid:"Required"`
+	CanoneTot           float64 `form:"canonetotale" valid:"Required"`
+	KmContrattuali      int     `form:"kmcontrattuali" valid:"Required"`
+	AddebitoKmExtra     int     `form:"addebitokmextra" valid:"Required"`
+	ImportoKm           float64 `form:"importokm" valid:"Required"`
+	ImportoTot          float64 `form:"imptotale" valid:"Required"`
+	KmInizioGest        int     `form:"kmingest" valid:"Required"`
+	KmFineGest          int     `form:"kmfinegest" valid:"Required"`
+	Note                string  `form:"note" valid:"MaxSize(100)"`
+	Fornitori           string  `form:"fornitore" `
+	PIFornitori         string  `form:"pifornitore" `
 }
 
 type conducente struct {
@@ -216,6 +217,7 @@ func max(a, b int64) int64 {
 	return a
 }
 
+//InitializeModule inizializza le tabelle usate dal modulo Automezzi
 func InitializeModule() {
 
 	beego.Debug("Inizializzo il modulo automezzi")
@@ -421,6 +423,7 @@ func InitializeModule() {
 
 }
 
+//AddFornitore permette di aggiungere un nuovo fornitore
 func (c *AutomezziController) AddFornitore() {
 	c.activeContent("automezzi/add/fornitore")
 	//verifica se l'utente è loggato
@@ -487,6 +490,7 @@ func (c *AutomezziController) AddFornitore() {
 	}
 }
 
+//ViewFornitori permette di visualizzare i fornitori inseriti sul portale
 func (c *AutomezziController) ViewFornitori() {
 	// Only administrator can Manage accounts
 	c.activeContent("automezzi/view/fornitori")
@@ -516,32 +520,15 @@ func (c *AutomezziController) ViewFornitori() {
 			c.Redirect("/", 302)
 		}
 	}(c)
-	//NON VA SENZA PARAMETRI
-	//******** Read users from database
+	//Se non ci sono parametri forzala ricerca standard
+	var parms string
 	if c.Ctx.Input.Param(":parms") == "" {
-		o := orm.NewOrm()
-		o.Using("default")
-		var fornitori []models.Fornitori
-
-		o.QueryTable("fornitori")
-
-		/*QUANDO NON CI SONO PARAMETRI??*/
-		//fmt.Println("user nums: ", num)
-		for i := range fornitori {
-			fmt.Println(fornitori[i])
-		}
-		rows := "<tr class='tabmenu'><td>ID</td><td>DESCRIZIONE</td><td>PARTITA IVA</td><td>MODIFICA</td><td>NUOVO CONTRATTO</td></tr>"
-		for i := range fornitori {
-
-			rows += fmt.Sprintf("<tr><td>%s</td>"+
-				"<td>%s</td><td><a class='btn btn-defalut btn-xs' href='http://%s/automezzi/fornitore/%d'><span class='glyphicon glyphicon-edit'></span> Modifica</a></td><td><a class='btn btn-defalut btn-xs' href='http://%s/automezzi/add/contratto/%d'><span class='glyphicon glyphicon-edit'></span>  Nuovo Contratto</a></td></tr>", fornitori[i].Descrizione, fornitori[i].PI, appcfgdomainname, fornitori[i].ID, appcfgdomainname, fornitori[i].ID)
-
-		}
-		c.Data["Rows"] = template.HTML(rows)
+		parms = "id!0!id__gte,0"
+	} else {
+		parms = c.Ctx.Input.Param(":parms")
 	}
 	//parametro serve per suddividere in pagine l'elenco utenti
 	const pagesize = 10
-	parms := c.Ctx.Input.Param(":parms")
 	c.Data["parms"] = parms
 	str := strings.Split(parms, "!")
 	fmt.Println("parms is", str)
@@ -671,26 +658,16 @@ func (c *AutomezziController) ViewContrattiAcq() {
 		offset = 0
 	}
 
-	num, err := qs.Limit(pagesize, offset).OrderBy(order).All(&contratti)
+	num, err := qs.Limit(pagesize, offset).OrderBy(order).RelatedSel().All(&contratti)
 	if err != nil {
 		fmt.Println("Query table failed:", err)
 	}
 
-	fornitore := models.Fornitori{}
 	/*TABELLA IN BASE AI PARAMETRI*/
 	for i := range contratti {
-		o := orm.NewOrm()
-		err := o.QueryTable("fornitori").Filter("ID", contratti[i].Fornitori).RelatedSel().One(&fornitore)
-		if err == orm.ErrNoRows {
-			//non esiste nessun contratto con questo codice quindi uso il codice passato come parametro
-			flash.Notice("Non ci sono contratti")
-			flash.Store(&c.Controller)
-			c.Redirect("/notice", 302)
-		} else if err == orm.ErrMissPK {
-			fmt.Println("Errore - Contattare l'amministratore del sito")
-		}
+
 		rows += fmt.Sprintf("<tr><td>%s</td>"+
-			"<td>%s</td><td>%s</td><td><a class='btn btn-defalut btn-xs' href='http://%s/automezzi/edit/contrattoacq/%d'><span class='glyphicon glyphicon-edit'></span> Modifica</a></td>", contratti[i].NContratto, contratti[i].DataCont, fornitore.Descrizione, appcfgdomainname, contratti[i].ID)
+			"<td>%s</td><td>%s</td><td><a class='btn btn-defalut btn-xs' href='http://%s/automezzi/edit/contrattoacq/%d'><span class='glyphicon glyphicon-edit'></span> Modifica</a></td></tr>", contratti[i].NContratto, contratti[i].DataCont, contratti[i].Fornitori.Descrizione, appcfgdomainname, contratti[i].ID)
 	}
 	c.Data["Rows"] = template.HTML(rows)
 
@@ -762,10 +739,10 @@ func (c *AutomezziController) EditAcquisto() {
 
 		c.Data["ID"] = contratto.ID
 		c.Data["NContratto"] = contratto.NContratto
-		c.Data["DataCont"] = contratto.DataCont
+		c.Data["DataCont"] = contratto.DataCont.Format("2006-01-02")
 		c.Data["Importo"] = contratto.Importo
 		c.Data["AmmortamentoAnnuo"] = contratto.AmmortamentoAnnuo
-		c.Data["FineGaranzia"] = contratto.FineGaranzia
+		c.Data["FineGaranzia"] = contratto.FineGaranzia.Format("2006-01-02")
 		c.Data["KmAcquisto"] = contratto.KmAcquisto
 		c.Data["KmInizioGest"] = contratto.KmInizioGest
 		c.Data["Note"] = contratto.Note
@@ -802,12 +779,12 @@ func (c *AutomezziController) EditAcquisto() {
 			return
 		}
 		//Converte le data da string a time
-		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont + " 10:00")
+		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		dgar, err := time.Parse("2006-01-02 15:04", u.DataCont + " 10:00")
+		dgar, err := time.Parse("2006-01-02 15:04", u.DataCont+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -872,7 +849,7 @@ func (c *AutomezziController) AddAcquisto() {
 
 	//Estrae i dati del fornitore partendo dal ID passato come parametro
 	fornitore := models.Fornitori{ID: idforn}
-	
+
 	o := orm.NewOrm()
 	o.Using("default")
 	err = o.Read(&fornitore, "ID")
@@ -882,7 +859,7 @@ func (c *AutomezziController) AddAcquisto() {
 		flash.Store(&c.Controller)
 		return
 	}
-	//Inserisce nel form i dati del fornitore 
+	//Inserisce nel form i dati del fornitore
 	defer func(c *AutomezziController, fornitore *models.Fornitori) {
 
 		c.Data["Fornitori"] = fornitore.Descrizione
@@ -910,12 +887,12 @@ func (c *AutomezziController) AddAcquisto() {
 		}
 
 		//Trasforma le date da string a Time
-		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont + " 10:00")
+		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		dgar, err := time.Parse("2006-01-02 15:04", u.FineGaranzia + " 10:00")
+		dgar, err := time.Parse("2006-01-02 15:04", u.FineGaranzia+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -938,7 +915,6 @@ func (c *AutomezziController) AddAcquisto() {
 			flash.Store(&c.Controller)
 			return
 		}
-		
 
 		flash.Notice("Contratto Registrato")
 		flash.Store(&c.Controller)
@@ -1015,26 +991,15 @@ func (c *AutomezziController) ViewContrattiLea() {
 		offset = 0
 	}
 
-	num, err := qs.Limit(pagesize, offset).OrderBy(order).All(&contratti)
+	num, err := qs.Limit(pagesize, offset).OrderBy(order).RelatedSel().All(&contratti)
 	if err != nil {
 		fmt.Println("Query table failed:", err)
 	}
 
-	fornitore := models.Fornitori{}
 	/*TABELLA IN BASE AI PARAMETRI*/
 	for i := range contratti {
-		o := orm.NewOrm()
-		err := o.QueryTable("fornitori").Filter("ID", contratti[i].Fornitori).RelatedSel().One(&fornitore)
-		if err == orm.ErrNoRows {
-			//non esiste nessun contratto con questo codice quindi uso il codice passato come parametro
-			flash.Notice("Non ci sono contratti")
-			flash.Store(&c.Controller)
-			c.Redirect("/notice", 302)
-		} else if err == orm.ErrMissPK {
-			fmt.Println("Errore - Contattare l'amministratore del sito")
-		}
 		rows += fmt.Sprintf("<tr><td>%s</td>"+
-			"<td>%s</td><td>%s</td><td><a class='btn btn-defalut btn-xs' href='http://%s/automezzi/edit/contrattolea/%d'><span class='glyphicon glyphicon-edit'></span> Modifica</a></td>", contratti[i].NContratto, contratti[i].DataCont, fornitore.Descrizione, appcfgdomainname, contratti[i].ID)
+			"<td>%s</td><td>%s</td><td><a class='btn btn-defalut btn-xs' href='http://%s/automezzi/edit/contrattolea/%d'><span class='glyphicon glyphicon-edit'></span> Modifica</a></td></tr>", contratti[i].NContratto, contratti[i].DataCont, contratti[i].Fornitori.Descrizione, appcfgdomainname, contratti[i].ID)
 	}
 	c.Data["Rows"] = template.HTML(rows)
 
@@ -1106,15 +1071,15 @@ func (c *AutomezziController) EditLeasing() {
 
 		c.Data["ID"] = contratto.ID
 		c.Data["NContratto"] = contratto.NContratto
-		c.Data["DataCont"] = contratto.DataCont
-		c.Data["PrimaRata"] = contratto.PrimaRata 
+		c.Data["DataCont"] = contratto.DataCont.Format("2006-01-02")
+		c.Data["PrimaRata"] = contratto.PrimaRata
 		c.Data["RataSucc"] = contratto.RataSucc
 		c.Data["NRate"] = contratto.NRate
 		c.Data["Riscatto"] = contratto.Riscatto
-		c.Data["DataRiscatto"] = contratto.DataRiscatto
+		c.Data["DataRiscatto"] = contratto.DataRiscatto.Format("2006-01-02")
 		c.Data["ImportoTot"] = contratto.ImportoTot
-		c.Data["FineCont"] = contratto.FineCont
-		c.Data["FineGaranzia"] = contratto.FineGaranzia
+		c.Data["FineCont"] = contratto.FineCont.Format("2006-01-02")
+		c.Data["FineGaranzia"] = contratto.FineGaranzia.Format("2006-01-02")
 		c.Data["KmInizioGest"] = contratto.KmInizioGest
 		c.Data["KmFineGest"] = contratto.KmFineGest
 		c.Data["Note"] = contratto.Note
@@ -1151,31 +1116,30 @@ func (c *AutomezziController) EditLeasing() {
 			return
 		}
 		//Converte le data da string a time
-		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont + " 10:00")
+		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		dris, err := time.Parse("2006-01-02 15:04", u.DataRiscatto + " 10:00")
+		dris, err := time.Parse("2006-01-02 15:04", u.DataRiscatto+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		dfcon, err := time.Parse("2006-01-02 15:04", u.FineCont + " 10:00")
+		dfcon, err := time.Parse("2006-01-02 15:04", u.FineCont+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		dgar, err := time.Parse("2006-01-02 15:04", u.FineGaranzia + " 10:00")
+		dgar, err := time.Parse("2006-01-02 15:04", u.FineGaranzia+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		
 
 		contratto.NContratto = u.NContratto
 		contratto.DataCont = dcont
-		contratto.PrimaRata = u.PrimaRata 
+		contratto.PrimaRata = u.PrimaRata
 		contratto.RataSucc = u.RataSucc
 		contratto.NRate = u.NRate
 		contratto.Riscatto = u.Riscatto
@@ -1186,7 +1150,7 @@ func (c *AutomezziController) EditLeasing() {
 		contratto.KmInizioGest = u.KmInizioGest
 		contratto.KmFineGest = u.KmFineGest
 		contratto.Note = u.Note
-		
+
 		//Aggiorno Contratto
 		_, err = o.Update(&contratto)
 		if err != nil {
@@ -1237,7 +1201,7 @@ func (c *AutomezziController) AddLeasing() {
 
 	//Estrae i dati del fornitore partendo dal ID passato come parametro
 	fornitore := models.Fornitori{ID: idforn}
-	
+
 	o := orm.NewOrm()
 	o.Using("default")
 	err = o.Read(&fornitore, "ID")
@@ -1247,7 +1211,7 @@ func (c *AutomezziController) AddLeasing() {
 		flash.Store(&c.Controller)
 		return
 	}
-	//Inserisce nel form i dati del fornitore 
+	//Inserisce nel form i dati del fornitore
 	defer func(c *AutomezziController, fornitore *models.Fornitori) {
 
 		c.Data["Fornitori"] = fornitore.Descrizione
@@ -1276,25 +1240,25 @@ func (c *AutomezziController) AddLeasing() {
 
 		//Trasforma le date da string a Time
 		fmt.Println(u.DataCont)
-		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont + " 10:00")
+		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		fmt.Println(u.DataRiscatto)
-		dris, err := time.Parse("2006-01-02 15:04", u.DataRiscatto + " 10:00")
+		dris, err := time.Parse("2006-01-02 15:04", u.DataRiscatto+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		fmt.Println(u.FineCont)
-		dfcon, err := time.Parse("2006-01-02 15:04", u.FineCont + " 10:00")
+		dfcon, err := time.Parse("2006-01-02 15:04", u.FineCont+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		fmt.Println(u.FineGaranzia)
-		dgar, err := time.Parse("2006-01-02 15:04", u.FineGaranzia + " 10:00")
+		dgar, err := time.Parse("2006-01-02 15:04", u.FineGaranzia+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -1303,7 +1267,7 @@ func (c *AutomezziController) AddLeasing() {
 
 		contratto.NContratto = u.NContratto
 		contratto.DataCont = dcont
-		contratto.PrimaRata = u.PrimaRata 
+		contratto.PrimaRata = u.PrimaRata
 		contratto.RataSucc = u.RataSucc
 		contratto.NRate = u.NRate
 		contratto.Riscatto = u.Riscatto
@@ -1323,7 +1287,6 @@ func (c *AutomezziController) AddLeasing() {
 			flash.Store(&c.Controller)
 			return
 		}
-		
 
 		flash.Notice("Contratto Leasing Registrato")
 		flash.Store(&c.Controller)
@@ -1400,26 +1363,16 @@ func (c *AutomezziController) ViewContrattiNol() {
 		offset = 0
 	}
 
-	num, err := qs.Limit(pagesize, offset).OrderBy(order).All(&contratti)
+	num, err := qs.Limit(pagesize, offset).OrderBy(order).RelatedSel().All(&contratti)
 	if err != nil {
 		fmt.Println("Query table failed:", err)
 	}
 
-	fornitore := models.Fornitori{}
 	/*TABELLA IN BASE AI PARAMETRI*/
 	for i := range contratti {
-		o := orm.NewOrm()
-		err := o.QueryTable("fornitori").Filter("ID", contratti[i].Fornitori).RelatedSel().One(&fornitore)
-		if err == orm.ErrNoRows {
-			//non esiste nessun contratto con questo codice quindi uso il codice passato come parametro
-			flash.Notice("Non ci sono contratti")
-			flash.Store(&c.Controller)
-			c.Redirect("/notice", 302)
-		} else if err == orm.ErrMissPK {
-			fmt.Println("Errore - Contattare l'amministratore del sito")
-		}
+
 		rows += fmt.Sprintf("<tr><td>%s</td>"+
-			"<td>%s</td><td>%s</td><td><a class='btn btn-defalut btn-xs' href='http://%s/automezzi/edit/contrattonol/%d'><span class='glyphicon glyphicon-edit'></span> Modifica</a></td>", contratti[i].NContratto, contratti[i].DataCont, fornitore.Descrizione, appcfgdomainname, contratti[i].ID)
+			"<td>%s</td><td>%s</td><td><a class='btn btn-defalut btn-xs' href='http://%s/automezzi/edit/contrattonol/%d'><span class='glyphicon glyphicon-edit'></span> Modifica</a></td></tr>", contratti[i].NContratto, contratti[i].DataCont, contratti[i].Fornitori.Descrizione, appcfgdomainname, contratti[i].ID)
 	}
 	c.Data["Rows"] = template.HTML(rows)
 
@@ -1491,9 +1444,9 @@ func (c *AutomezziController) EditNoleggio() {
 
 		c.Data["ID"] = contratto.ID
 		c.Data["NContratto"] = contratto.NContratto
-		c.Data["DataCont"] = contratto.DataCont
-		c.Data["DataInizio"] = contratto.DataInizio
-		c.Data["DataFine"] = contratto.DataFine
+		c.Data["DataCont"] = contratto.DataCont.Format("2006-01-02")
+		c.Data["DataInizio"] = contratto.DataInizio.Format("2006-01-02")
+		c.Data["DataFine"] = contratto.DataFine.Format("2006-01-02")
 		c.Data["Riparametrizzazione"] = contratto.Riparametrizzazione
 		c.Data["NRate"] = contratto.NRate
 		c.Data["CanoneBase"] = contratto.CanoneBase
@@ -1540,17 +1493,17 @@ func (c *AutomezziController) EditNoleggio() {
 			return
 		}
 		//Converte le data da string a time
-		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont + " 10:00")
+		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		diniz, err := time.Parse("2006-01-02 15:04", u.DataInizio + " 10:00")
+		diniz, err := time.Parse("2006-01-02 15:04", u.DataInizio+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		dfine, err := time.Parse("2006-01-02 15:04", u.DataFine + " 10:00")
+		dfine, err := time.Parse("2006-01-02 15:04", u.DataFine+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -1624,7 +1577,7 @@ func (c *AutomezziController) AddNoleggio() {
 
 	//Estrae i dati del fornitore partendo dal ID passato come parametro
 	fornitore := models.Fornitori{ID: idforn}
-	
+
 	o := orm.NewOrm()
 	o.Using("default")
 	err = o.Read(&fornitore, "ID")
@@ -1634,7 +1587,7 @@ func (c *AutomezziController) AddNoleggio() {
 		flash.Store(&c.Controller)
 		return
 	}
-	//Inserisce nel form i dati del fornitore 
+	//Inserisce nel form i dati del fornitore
 	defer func(c *AutomezziController, fornitore *models.Fornitori) {
 
 		c.Data["Fornitori"] = fornitore.Descrizione
@@ -1662,17 +1615,17 @@ func (c *AutomezziController) AddNoleggio() {
 		}
 
 		//Converte le data da string a time
-		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont + " 10:00")
+		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		diniz, err := time.Parse("2006-01-02 15:04", u.DataInizio + " 10:00")
+		diniz, err := time.Parse("2006-01-02 15:04", u.DataInizio+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		dfine, err := time.Parse("2006-01-02 15:04", u.DataFine + " 10:00")
+		dfine, err := time.Parse("2006-01-02 15:04", u.DataFine+" 10:00")
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -1706,7 +1659,6 @@ func (c *AutomezziController) AddNoleggio() {
 			flash.Store(&c.Controller)
 			return
 		}
-		
 
 		flash.Notice("Contratto Noleggio Registrato")
 		flash.Store(&c.Controller)
@@ -1776,6 +1728,7 @@ func (c *AutomezziController) AddConducente() {
 	}
 }
 
+//AddData funzione test percapire il funzionamento dell'inserimento della data
 func (c *AutomezziController) AddData() {
 	c.activeContent("automezzi/add/appoggio")
 
@@ -1812,8 +1765,6 @@ func (c *AutomezziController) AddData() {
 		fmt.Print(u)
 		fmt.Println(u.dataInFlotta)
 
-	
-	
 		//funziona!! ora bisogna trasformarlo in time
 		res := c.GetString("dataInFlotta")
 		res = res + " 10:00"
@@ -1852,6 +1803,7 @@ func (c *AutomezziController) AddData() {
 	}
 }
 
+//AddAutomezzo permette di aggiungere un nuovo automezzo usando una normale schermata
 func (c *AutomezziController) AddAutomezzo() {
 	c.activeContent("automezzi/add/automezzo")
 
@@ -2004,6 +1956,7 @@ func (c *AutomezziController) AddAutomezzo() {
 
 }
 
+//AddAutomezzo2 permette di aggiungere un nuovo automezzo usando una schermata con i tab
 func (c *AutomezziController) AddAutomezzo2() {
 	c.activeContent("automezzi/add/automezzo2")
 
@@ -2066,13 +2019,13 @@ func (c *AutomezziController) AddAutomezzo2() {
 		u.NLibretto = strings.ToUpper(u.NLibretto)
 		u.NTelaio = strings.ToUpper(u.NTelaio)
 		c.Data["Automezzo"] = u
-		/*
-			valid := validation.Validation{}
-			if b, _ := valid.Valid(&u); !b {
-				c.Data["Errors"] = valid.ErrorsMap
-				return
-			}
-		*/
+
+		valid := validation.Validation{}
+		if b, _ := valid.Valid(&u); !b {
+			c.Data["Errors"] = valid.ErrorsMap
+			return
+		}
+
 		//******** Save user info to database
 		o := orm.NewOrm()
 		o.Using("default")
@@ -2177,4 +2130,392 @@ func (c *AutomezziController) AddAutomezzo2() {
 
 }
 
+//ViewAutomezzi permette di visualizzare gli automezzi caricati sul portale
+func (c *AutomezziController) ViewAutomezzi() {
+	// Only administrator can Manage accounts
+	c.activeContent("automezzi/view/automezzi")
 
+	//******** c page requires login
+	sess := c.GetSession("portale")
+	if sess == nil {
+		c.Redirect("/", 302)
+		return
+	}
+	flash := beego.NewFlash()
+	m := sess.(map[string]interface{})
+	fmt.Println(m["admin"])
+	fmt.Println(reflect.ValueOf(m["admin"]).Type())
+	if m["admin"] != 3 {
+		flash.Notice("Non hai i diritti per accedere a questa pagina")
+		flash.Store(&c.Controller)
+		c.Redirect("/notice", 302)
+	}
+
+	fmt.Printf("hai i diritti")
+
+	//in caso di panic reindirizza alla home
+	defer func(c *AutomezziController) {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered in Index", r)
+			c.Redirect("/", 302)
+		}
+	}(c)
+	//NON VA SENZA PARAMETRI
+	//parametro serve per suddividere in pagine l'elenco contratti e se non è presente viene forzato
+	const pagesize = 10
+	var parms string
+	if c.Ctx.Input.Param(":parms") == "" {
+		parms = "id!0!id__gte,0"
+	} else {
+		parms = c.Ctx.Input.Param(":parms")
+	}
+
+	c.Data["parms"] = parms
+	str := strings.Split(parms, "!")
+	fmt.Println("parms is", str)
+	order := str[0]
+	off, _ := strconv.Atoi(str[1])
+	offset := int64(off)
+	if offset < 0 {
+		offset = 0
+	}
+	query := str[2]
+
+	rows := ""
+	var veicoli []*models.VeicoliDG
+	qs, ok := c.setCompare(query, "veicoli_d_g")
+	if !ok {
+		fmt.Println("cannot set QuerySeter")
+		o := orm.NewOrm()
+		qs := o.QueryTable("veicoli_d_g")
+		qs.RelatedSel("veicoli_d_t")
+		qs = qs.Filter("id__gte", 0)
+		c.Data["query"] = "id__gte,0"
+	}
+
+	count, _ := qs.Count()
+	c.Data["count"] = count
+	if offset >= count {
+		offset = 0
+	}
+
+	num, err := qs.Limit(pagesize, offset).OrderBy(order).RelatedSel().All(&veicoli)
+	if err != nil {
+		fmt.Println("Query table failed:", err)
+	}
+
+	/*TABELLA IN BASE AI PARAMETRI*/
+	for i := range veicoli {
+		rows += fmt.Sprintf("<tr><td>%s</td>"+
+			"<td>%s</td><td>%s</td><td><a class='btn btn-defalut btn-xs' href='http://%s/automezzi/edit/veicoli/%d'><span class='glyphicon glyphicon-edit'></span> Modifica</a></td></tr>", veicoli[i].Targa, veicoli[i].VeicoliDT.Marca, veicoli[i].VeicoliDT.Modello, appcfgdomainname, veicoli[i].ID)
+	}
+	c.Data["Rows"] = template.HTML(rows)
+
+	c.Data["order"] = order
+	c.Data["offset"] = offset
+	c.Data["end"] = max(0, (count/pagesize)*pagesize)
+
+	if num+offset < count {
+		c.Data["next"] = num + offset
+	}
+	if offset-pagesize >= 0 {
+		c.Data["prev"] = offset - pagesize
+		c.Data["showprev"] = true
+	} else if offset > 0 && offset < pagesize {
+		c.Data["prev"] = 0
+		c.Data["showprev"] = true
+	}
+
+	if count > pagesize {
+		c.Data["ShowNav"] = true
+	}
+	c.Data["progress"] = float64(offset*100) / float64(max(count, 1))
+
+}
+
+//EditAutomezzo permette di modificare gli automezzi caricati sul portale
+//Il parametro passato alla pagina è VeicoliDG.ID
+func (c *AutomezziController) EditAutomezzo() {
+	/*
+		c.activeContent("automezzi/edit/automezzo")
+		//verifica se l'utente è loggato
+		sess := c.GetSession("portale")
+		if sess == nil {
+			c.Redirect("/", 302)
+			return
+		}
+		//inizializza i messaggi
+		flash := beego.NewFlash()
+		//carica la sessione
+		m := sess.(map[string]interface{})
+		//verifica se si detengono i privilegi per accedere alla pagina
+		if m["admin"] != 3 {
+			flash.Notice("Non hai i diritti per accedere a questa pagina")
+			flash.Store(&c.Controller)
+			c.Redirect("/notice", 302)
+		}
+		fmt.Printf("hai i diritti")
+		//prende i paramentri della pagina nel formato Ncontratto!IDFornitore
+		parms := c.Ctx.Input.Param(":parms")
+		idveic, _ := strconv.Atoi(parms)
+		c.Data["AutomezzoDG.ID"] = idveic
+		veicolo := models.VeicoliDG{ID: idveic}
+
+		o := orm.NewOrm()
+		o.Using("default")
+		//Flag per stabilire se il contratto è nuovo o esisteva già
+
+		err := o.QueryTable("veicoli_d_g").Filter("ID", idveic).RelatedSel().One(&veicolo)
+		if err == orm.ErrNoRows {
+			//non esiste nessun contratto con questo codice
+			flash.Notice("Il veicolo non esiste")
+			flash.Store(&c.Controller)
+			c.Redirect("/notice", 302)
+		} else if err == orm.ErrMissPK {
+			fmt.Println("Errore - Contattare l'amministratore del sito")
+		}
+		//aggiorna il form con i dati letti dal DB
+
+		defer func(c *AutomezziController, veicolo *models.VeicoliDG) {
+
+			c.Data["AutomezzoDG.ID"] = veicolo.ID
+			c.Data["AutomezzoDG.Targa"] = veicolo.Targa
+			c.Data["AutomezzoDG.DataInFlotta"] = veicolo.DataInFlotta
+			c.Data["AutomezzoDG.DataFineFlotta"] = veicolo.DataFineFlotta
+			c.Data["AutomezzoDG.Note"] = veicolo.Note
+			c.Data["AutomezzoDG.TipoVeicolo"] = veicolo.TipiVeicolo.Descrizione
+			c.Data["AutomezzoDG.Settore"] = veicolo.Settori.Descrizione
+			c.Data["AutomezzoDG.Condizioni"] = veicolo.Condizioni
+			c.Data["AutomezzoDG.Impiegho"] = veicolo.Impieghi.Descrizione
+			c.Data["AutomezzoDG.Conducenti"] = veicolo.Conducenti // bisogna gestire i multi conducenti
+			c.Data["AutomezzoDG.VeicoliDT.AnnoImmatricolazione"] = veicolo.VeicoliDT.AnnoImmatricolazione
+			c.Data["AutomezzoDG.VeicoliDT.NLibretto"] = veicolo.VeicoliDT.NLibretto
+			c.Data["AutomezzoDG.VeicoliDT.NTelaio"] = veicolo.VeicoliDT.NTelaio
+			c.Data["AutomezzoDG.VeicoliDT.Marca"] = veicolo.VeicoliDT.Marca
+			c.Data["AutomezzoDG.VeicoliDT.Modello"] = veicolo.VeicoliDT.Modello
+			c.Data["AutomezzoDG.VeicoliDT.NorEuro"] = veicolo.VeicoliDT.NorEuro
+			c.Data["AutomezzoDG.VeicoliDT.Kw"] = veicolo.VeicoliDT.Kw
+			c.Data["AutomezzoDG.VeicoliDT.Cilindrata"] = veicolo.VeicoliDT.Cilindrata
+			c.Data["AutomezzoDG.VeicoliDT.ConsumoTeorico"] = veicolo.VeicoliDT.ConsumoTeorico
+
+			c.Data["AutomezzoDG.VeicoliDT.KmAnno"] = veicolo.VeicoliDT.KmAnno
+			c.Data["AutomezzoDG.VeicoliDT.CostoKm"] = veicolo.VeicoliDT.CostoKm
+			c.Data["AutomezzoDG.VeicoliDT.Pneumatici"] = veicolo.VeicoliDT.Pneumatici
+
+			c.Data["AutomezzoDG.VeicoliDT.Allegati"] = veicolo.VeicoliDT.Allegati //bisogna gestire i multi allegati
+			c.Data["AutomezzoDG.VeicoliDT.Carburante"] = veicolo.VeicoliDT.Carburante.Descrizione
+			c.Data["AutomezzoDG.VeicoliDT.ContrAcquisti"] = veicolo.VeicoliDT.ContrAcquisti
+			c.Data["AutomezzoDG.VeicoliDT.ContrLeasing"] = veicolo.VeicoliDT.ContrLeasing
+			c.Data["AutomezzoDG.VeicoliDT.ContrNoleggi"] = veicolo.VeicoliDT.ContrNoleggi //bisogna gestire i multi contratti
+
+		}(c, &veicolo)
+
+		//XSRF attack defense
+		c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+		if c.Ctx.Input.Method() == "POST" {
+
+			u := automezzo{}
+
+			if err := c.ParseForm(&u); err != nil {
+				fmt.Println("cannot parse form")
+				return
+			}
+			f := models.Fornitori{ID: contratto.Fornitori.ID, Descrizione: u.Fornitori, PI: u.PIFornitori}
+			fmt.Println(u.NContratto)
+			fmt.Println(u.DataCont)
+			fmt.Println(f.Descrizione)
+			c.Data["data"] = u
+			valid := validation.Validation{}
+			if b, _ := valid.Valid(&u); !b {
+				c.Data["Errors"] = valid.ErrorsMap
+				return
+			}
+			//Aggiorno Fornitore
+			_, err := o.Update(&f)
+			if err != nil {
+				flash.Error("Errore interno")
+				flash.Store(&c.Controller)
+				return
+			}
+			//Converte le data da string a time
+			dcont, err := time.Parse("2006-01-02 15:04", u.DataCont+" 10:00")
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			diniz, err := time.Parse("2006-01-02 15:04", u.DataInizio+" 10:00")
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			dfine, err := time.Parse("2006-01-02 15:04", u.DataFine+" 10:00")
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			veicolo.Targa = u.Targa
+			veicolo.DataInFlotta = u.DataInFlotta
+			veicolo.DataFineFlotta = u.DataFineFlotta
+			veicolo.TipoVeicolo = u.TipoVeicolo
+			veicolo.Settore = u.Settore
+			veicolo.Condizione = u.Condizione
+			veicolo.Impiego = u.Impiego
+			veicolo.Conducente = u.Conducente
+			veicolo.Note = u.Note
+			veicolo.AnnoImmatricolazione = u.AnnoImmatricolazione
+			veicolo.NLibretto = u.NLibretto
+			veicolo.NTelaio = u.NTelaio
+			veicolo.Marca = u.Marca
+			veicolo.Modello = u.Modello
+			veicolo.Carburante = u.Carburante
+			veicolo.NorEuro = u.NorEuro
+			veicolo.KW = u.KW
+			veicolo.Cilindrata = u.Cilindrata
+			veicolo.ConsumoTeorico = u.ConsumoTeorico
+			veicolo.KMAnno = u.KMAnno
+			veicolo.Costokm = u.Costokm
+			veicolo.Pneumatici = u.Pneumatici
+			veicolo.Contratto = u.Contratto
+			veicolo.NContratto = u.NContratto
+
+			//Aggiorno Contratto
+			_, err = o.Update(&veicolo)
+			if err != nil {
+				flash.Error("Errore interno nell'aggiornare il contratto")
+				flash.Store(&c.Controller)
+				return
+			}
+			//quando modifico il contratto potremi mandare un messaggio direttamente nella finestra dei messaggi nella pagina ViewContrattiNol
+			flash.Notice("Contratto di Noleggio Modificato")
+			flash.Store(&c.Controller)
+			c.Redirect("/notice", 302)
+
+		}
+	*/
+}
+
+//AddAutomezzo3 permette di caricare un nuovo automezzo
+//Il parametro passato alla pagina è Fornitore.ID e ID Contratti
+func (c *AutomezziController) AddAutomezzo3() {
+	c.activeContent("automezzi/add/automezzo")
+	//verifica se l'utente è loggato
+	sess := c.GetSession("portale")
+	if sess == nil {
+		c.Redirect("/", 302)
+		return
+	}
+	//inizializza i messaggi
+	flash := beego.NewFlash()
+	//carica la sessione
+	m := sess.(map[string]interface{})
+	//verifica se si detengono i privilegi per accedere alla pagina
+	if m["admin"] != 3 {
+		flash.Notice("Non hai i diritti per accedere a questa pagina")
+		flash.Store(&c.Controller)
+		c.Redirect("/notice", 302)
+	}
+	fmt.Printf("hai i diritti")
+	//prende i paramentri della pagina nel formato Ncontratto!IDFornitore
+	parms := c.Ctx.Input.Param(":parms")
+	idcontr, err := strconv.Atoi(parms)
+	if err != nil {
+		fmt.Println(err)
+		flash.Error("Impossibile convertire in Int il codice fornitore")
+		flash.Store(&c.Controller)
+		return
+	}
+	//Inizializza il contratto
+	contratto := models.ContrNoleggi{ID: idcontr}
+
+	//Estrae i dati del fornitore partendo dal ID passato come parametro
+	fornitore := models.Fornitori{}
+
+	o := orm.NewOrm()
+	o.Using("default")
+	err = o.Read(&fornitore, "ID")
+	if err != nil {
+		fmt.Println(err)
+		flash.Error("Internal error")
+		flash.Store(&c.Controller)
+		return
+	}
+	//Inserisce nel form i dati del fornitore
+	defer func(c *AutomezziController, fornitore *models.Fornitori) {
+
+		c.Data["Fornitori"] = fornitore.Descrizione
+		c.Data["PIFornitori"] = fornitore.PI
+
+	}(c, &fornitore)
+
+	//XSRF attack defense
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	if c.Ctx.Input.Method() == "POST" {
+
+		u := contrattoNol{}
+		//Estra i dati dal form
+		if err := c.ParseForm(&u); err != nil {
+			fmt.Println("cannot parse form")
+			return
+		}
+
+		//c.Data["data"] = u
+		//Valida i dati del form
+		valid := validation.Validation{}
+		if b, _ := valid.Valid(&u); !b {
+			c.Data["Errors"] = valid.ErrorsMap
+			return
+		}
+
+		//Converte le data da string a time
+		dcont, err := time.Parse("2006-01-02 15:04", u.DataCont+" 10:00")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		diniz, err := time.Parse("2006-01-02 15:04", u.DataInizio+" 10:00")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		dfine, err := time.Parse("2006-01-02 15:04", u.DataFine+" 10:00")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		//Inserisce i dati estratti dal form den contratto
+
+		contratto.NContratto = u.NContratto
+		contratto.DataCont = dcont
+		contratto.DataInizio = diniz
+		contratto.DataFine = dfine
+		contratto.Riparametrizzazione = u.Riparametrizzazione
+		contratto.NRate = u.NRate
+		contratto.CanoneBase = u.CanoneBase
+		contratto.CanoneServizi = u.CanoneServizi
+		contratto.CanoneAltro = u.CanoneAltro
+		contratto.CanoneTot = u.CanoneTot
+		contratto.KmContrattuali = u.KmContrattuali
+		contratto.AddebitoKmExtra = u.AddebitoKmExtra
+		contratto.ImportoKm = u.ImportoKm
+		contratto.ImportoTot = u.ImportoTot
+		contratto.KmInizioGest = u.KmInizioGest
+		contratto.KmFineGest = u.KmFineGest
+		contratto.Note = u.Note
+		contratto.Fornitori = &fornitore
+
+		//inserisce il contratto nel db
+		_, err = o.Insert(&contratto)
+		if err != nil {
+			flash.Error("Errore autorizzazioni applicazioni")
+			flash.Store(&c.Controller)
+			return
+		}
+
+		flash.Notice("Contratto Noleggio Registrato")
+		flash.Store(&c.Controller)
+		c.Redirect("/notice", 302)
+
+	}
+}
